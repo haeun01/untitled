@@ -8,6 +8,7 @@ import { FeedList } from "./FeedList";
 import { Wrapper } from "./Wrapper";
 import { Feed } from "./Feed";
 import { FeedUser } from "./FeedUser";
+import { SignUp } from "./SignUp";
 
 
 export function ReactRouter() {
@@ -18,8 +19,8 @@ export function ReactRouter() {
         <Route path='/' element={<Intro/>}></Route>
         <Route path='/intro' element={<Intro/>}></Route>
         <Route path='/login' element={<Login/>}></Route>
-        {/* <Route path='/signup' element={<Signup/>}></Route>
-        <Route path='/logout' element={<Logout/>}></Route> */}
+         <Route path='/signup' element={<SignUp/>}></Route>
+        {/*<Route path='/logout' element={<Logout/>}></Route> */}
         <Route path='/mypage' element={<MyPage/>}>
           <Route path='edit' element={<MyPageEdit/>}></Route>
           {/* <Route path='profile' element={<ProfileEdit/>}></Route> */}
