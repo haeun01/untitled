@@ -41,9 +41,9 @@ export function Navbar() {
   return (
     <>
       <Container>
-<LineContainer>
-      <Line/>
-        <h3>UNTITLED</h3>
+        <LineContainer>
+          <Line/>
+          <h3>UNTITLED</h3>
         </LineContainer>
         <Menubar onClick={toggleMenu}>
           <a href="#">

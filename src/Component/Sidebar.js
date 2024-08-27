@@ -30,7 +30,7 @@ const MenuContainer = styled.div`
   z-index: 3;
 `;
 
-const MenuLink = styled.a`
+const MenuLink = styled(Link)`
   font-size: 6.5em;
   color: white;
   text-decoration: none;
@@ -91,10 +91,10 @@ export function Sidebar({ isOpen, toggleMenu }) {
         />
       </CloseButton>
 
-      <MenuLink href={"intro"}>INTRO</MenuLink>
-      <MenuLink href={"feed"}>FEED</MenuLink>
-      <MenuLink href="#lecture">LECTURE</MenuLink>
-      <MenuLink href="#mypage">MYPAGE</MenuLink>
+      <MenuLink to='/intro'>INTRO</MenuLink>
+      <MenuLink to="/feed/1">FEED</MenuLink>
+      <MenuLink to="/lecture">LECTURE</MenuLink>
+      <MenuLink to="/mypage">MYPAGE</MenuLink>
 
       <LogoIcon>
         <img

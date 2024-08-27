@@ -10,7 +10,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   background-color: black;
-  padding-bottom: 5%;
   h3 {
     font-size: 60px;
     color: white;
@@ -87,7 +86,6 @@ export function Intro() {
 
   return (
     <>
-      <Navbar />
       <Container>
         <Rectangle>
           <Logo>

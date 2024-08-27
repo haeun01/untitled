@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Navbar } from "./Navbar";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -9,7 +11,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   background-color: black;
   padding-bottom: 200px;
 `;
@@ -72,17 +74,44 @@ const ButtonContainer = styled.div`
 `;
 
 export function Login() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  let id;
+  let password;
+
+  async function login(){
+      if(id==null || password==null){
+          alert("빈칸이 있습니다.");
+          return;
+      }
+      const user = {
+          userId: id,
+          password: password
+      };
+      try{
+          const response = await axios.post("http://localhost:8080/api/user/login", user, { withCredentials: true });
+          const data = response.data;
+          console.log(data);
+          setUser(user);
+          alert("로그인에 성공하셨습니다.");
+          window.location.href = '/';
+      }catch(error){
+          console.log("요청에 실패했습니다.", error);
+          alert("아이디 또는 비밀번호가 틀렸습니다.");
+      }
+  }
+    
   return (
     <>
-      <Navbar /> {/* Navbar 컴포넌트 */}
       <Container>
         <Title>Login</Title>
         <FormContainer>
-          <Input type="text" placeholder="ID" />
-          <Input type="password" placeholder="PW" />
+          <Input type="text" placeholder="ID" onChange={(e)=> {id = e.target.value}} />
+          <Input type="password" placeholder="PW" onChange={(e)=> {password = e.target.value}} />
           <ButtonContainer>
-            <Button primary>Login</Button>
-            <Button>Sign Up</Button>
+            <Button onClick={()=>{login()}}>Login</Button>
+            <Button onClick={()=>{navigate("/signup")}}>Sign Up</Button>
           </ButtonContainer>
         </FormContainer>
       </Container>
