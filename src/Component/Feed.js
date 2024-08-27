@@ -9,6 +9,8 @@ import bookmark from "./../img/bookmarkFeed.png";
 import blackbookmark from "./../img/bookmarkFeedCheck.png";
 import closeBtn from "./../img/x.png";
 import { SessionCurrent } from "./SessionCurrent";
+import { getServerImgFile } from "./File";
+import defaltUserImg from "./../img/defaltUserImg.png";
 
 const Container = styled.div`
     display: grid;
@@ -338,7 +340,7 @@ export function Feed() {
                 <Contents>
                     <Flex style={{padding: "20px 30px", justifyContent:"space-between"}}>
                         <Flex>
-                            <ProfileImg src={feed.user.profileImg} onClick={()=>{navigate("/feed/user/"+feed.user.userId)}}/>
+                            <ProfileImg src={feed.user.data? getServerImgFile(feed.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+feed.user.userId)}}/>
                             <div>
                                 <Flex>
                                     <div style={{fontSize: "20px", fontWeight: "bold"}}>{feed.user.userId}</div>
@@ -535,7 +537,7 @@ export function FeedCommentBar({comment, func}){
     return <>
         {commentDelete? <div/>: <FeedCommentContainer>
             <Flex style={{alignItems:"start"}}>
-                <Img src={comment.user.profileImg} onClick={()=>{navigate("/feed/user/"+comment.user.userId)}}/>
+                <Img src={comment.user.data? getServerImgFile(comment.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+comment.user.userId)}}/>
                 <div style={{width: "100%"}}>
                     <Flex style={{gap: "5px", marginBottom: "5px"}}>
                         <div>{comment.user.userId}</div>

@@ -5,6 +5,9 @@ import axios from "axios";
 import { SessionCurrent } from "./SessionCurrent";
 import styled from "styled-components";
 import { FollowerTooltip, FollowingTooltip, ScrollableContent, Tooltip } from "./Styles";
+import { getServerImgFile } from "./File";
+import defaltUserImg from "./../img/defaltUserImg.png";
+
 
 const Container = styled.div`
     padding: 10px 15%;
@@ -196,7 +199,7 @@ export function FeedUser(){
     return <Container>
         {user? <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
             <Flex style={{marginBottom:"20px", gap:"10%", width:"100%"}}>
-                <ProfileImg src={user.profileImg}/>
+                <ProfileImg src={user.data? getServerImgFile(user.data): defaltUserImg}/>
                 {follower && following && feedList? <FlexC style={{width:"100%"}}>
                     <Flex style={{gap: "50px", fontSize: "20px", justifyContent:"space-between"}}>
                         <FlexC style={{gap: "10px", alignItems:"center"}}>
@@ -216,7 +219,7 @@ export function FeedUser(){
                             </FlexC>
                         </Tooltip>
                         <Flex>
-                            {isMyPage? <Btn onClick={()=>{}}>프로필 편집</Btn> :<Btn onClick={()=>{FollowClick()}}>{sessionUserFollow? "following": "follow"}</Btn>}
+                            {isMyPage? <Btn onClick={()=>{navigate("/mypage/profile")}}>프로필 편집</Btn> :<Btn onClick={()=>{FollowClick()}}>{sessionUserFollow? "following": "follow"}</Btn>}
                             {teacher? <Btn onClick={()=>{navigate("/teacher/"+teacher.id)}}>lecture page</Btn>: null}
                         </Flex>
                     </Flex>

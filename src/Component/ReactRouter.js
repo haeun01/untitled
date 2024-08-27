@@ -9,6 +9,7 @@ import { Wrapper } from "./Wrapper";
 import { Feed } from "./Feed";
 import { FeedUser } from "./FeedUser";
 import { SignUp } from "./SignUp";
+import { ProfileEdit } from "./ProfileEdit";
 
 
 export function ReactRouter() {
@@ -23,7 +24,7 @@ export function ReactRouter() {
         {/*<Route path='/logout' element={<Logout/>}></Route> */}
         <Route path='/mypage' element={<MyPage/>}>
           <Route path='edit' element={<MyPageEdit/>}></Route>
-          {/* <Route path='profile' element={<ProfileEdit/>}></Route> */}
+          <Route path='profile' element={<ProfileEdit/>}></Route>
           <Route path='scrap' element={<FeedList/>}></Route>
           <Route path='like' element={<FeedList/>}></Route>
         </Route>
