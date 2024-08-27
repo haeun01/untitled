@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+import logoImg from "./../images/logo/logo_white.png";
+import closeImg from "./../images/icon/close.png";
+import loginImg from "./../images/icon/login.png";
 
 // Simple shine animation using background
 const shine = keyframes`
@@ -56,7 +59,7 @@ const CloseButton = styled.div`
   padding-top: 25px;
 `;
 
-const LoginIcon = styled.a`
+const LoginIcon = styled(Link)`
   position: absolute;
   top: 20px;
   right: 90px; 
@@ -73,9 +76,9 @@ const LogoIcon = styled.div`
 export function Sidebar({ isOpen, toggleMenu }) {
   return (
     <MenuContainer isOpen={isOpen}>
-      <LoginIcon href={"login"}>
+      <LoginIcon to='/login' onClick={toggleMenu}>
         <img
-          src="./images/icon/login.png"
+          src={loginImg}
           width="50"
           height="50"
           alt="login"
@@ -84,21 +87,21 @@ export function Sidebar({ isOpen, toggleMenu }) {
 
       <CloseButton onClick={toggleMenu}>
         <img
-          src="./images/icon/close.png"
+          src={closeImg}
           width="50"
           height="50"
           alt="close"
         />
       </CloseButton>
 
-      <MenuLink to='/intro'>INTRO</MenuLink>
-      <MenuLink to="/feed/1">FEED</MenuLink>
-      <MenuLink to="/lecture">LECTURE</MenuLink>
-      <MenuLink to="/mypage">MYPAGE</MenuLink>
+      <MenuLink to='/intro' onClick={toggleMenu}>INTRO</MenuLink>
+      <MenuLink to="/feed/1" onClick={toggleMenu}>FEED</MenuLink>
+      <MenuLink to="/lecture" onClick={toggleMenu}>LECTURE</MenuLink>
+      <MenuLink to="/mypage" onClick={toggleMenu}>MYPAGE</MenuLink>
 
       <LogoIcon>
         <img
-          src="./images/logo/logo_white.png"
+          src={logoImg}
           width="70"
           height="70"
           alt="bottom icon"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { Sidebar } from './Sidebar';
+import menuImg from "./../images/icon/menu.png";
 
 const Container = styled.div`
   height: 100px;
@@ -17,6 +18,7 @@ const Container = styled.div`
 const Menubar = styled.div`
   height: 50px;
   width: 50px;
+  cursor: pointer;
 `;
 
 const Line = styled.span`
@@ -46,14 +48,12 @@ export function Navbar() {
           <h3>UNTITLED</h3>
         </LineContainer>
         <Menubar onClick={toggleMenu}>
-          <a href="#">
-            <img
-              src="./images/icon/menu.png"
-              width="50"
-              height="50"
-              alt="menu"
-            />
-          </a>
+          <img
+            src={menuImg}
+            width="50"
+            height="50"
+            alt="menu"
+          />
         </Menubar>
       </Container>
       <Sidebar isOpen={isMenuOpen} toggleMenu={toggleMenu} />
