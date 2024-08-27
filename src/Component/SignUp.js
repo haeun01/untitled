@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Navbar } from "./Navbar";
+
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -11,6 +11,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: black;
+  padding-bottom: 200px;
 `;
 
 // 얇은 텍스트 스타일
@@ -45,7 +46,7 @@ const Input = styled.input`
 
 // 버튼 스타일
 const Button = styled.button`
-  width: 100%;
+  width: 45%;
   padding: 10px;
   margin: 20px 0;
   border: 1px solid white;
@@ -63,7 +64,15 @@ const Button = styled.button`
   }
 `;
 
+// 버튼 컨테이너 스타일
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
 export function SignUp() {
+
   return (
     <>
       <Container>
@@ -74,7 +83,9 @@ export function SignUp() {
           <Input type="text" placeholder="NAME" />
           <Input type="email" placeholder="EMAIL" />
           <Input type="date" placeholder="BIRTHDAY" />
-          <Button>Sign Up</Button>
+          <ButtonContainer>
+            <Button>Sign Up</Button>
+          </ButtonContainer>
         </FormContainer>
       </Container>
     </>

@@ -110,7 +110,7 @@ export function Login() {
           <Input type="text" placeholder="ID" onChange={(e)=> {id = e.target.value}} />
           <Input type="password" placeholder="PW" onChange={(e)=> {password = e.target.value}} />
           <ButtonContainer>
-            <Button onClick={()=>{login()}}>Login</Button>
+            <Button primary onClick={()=>{login()}}>Login</Button>
             <Button onClick={()=>{navigate("/signup")}}>Sign Up</Button>
           </ButtonContainer>
         </FormContainer>
