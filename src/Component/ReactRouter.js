@@ -13,6 +13,7 @@ import { ProfileEdit } from "./ProfileEdit";
 import { FeedCreate } from "./FeedCreate";
 import { LectureSearch } from "./LectureSearch";
 import { LectureDetail } from "./LectureDetail";
+import { Logout } from "./Logout";
 
 export function ReactRouter() {
   return (
@@ -24,6 +25,7 @@ export function ReactRouter() {
           <Route path="/intro" element={<Intro />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/mypage" element={<MyPage />}>
             <Route path="edit" element={<MyPageEdit />} />
             <Route path="profile" element={<ProfileEdit />} />

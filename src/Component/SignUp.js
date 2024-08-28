@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -72,19 +73,58 @@ const ButtonContainer = styled.div`
 `;
 
 export function SignUp() {
+  const [user, setUser] = useState(null);
+
+  let id;
+  let password;
+  let name;
+  let email;
+  let birthday;
+
+  async function signup(){
+    if(id==null || password==null || name==null || email==null || birthday==null){
+      alert("빈칸이 있습니다.");
+      return;
+    }
+    const user = {
+      userId: id,
+      password: password,
+      userName: name,
+      userEmail: email,
+      birthday: birthday
+    };
+    const sessionUser = {
+      userId: id,
+      password: password
+    }
+    try{
+      const response = await axios.post("http://localhost:8080/api/signup", user);
+      const data = response.data;
+      console.log(data);
+      alert(data);
+      if(data == "이미 등록된 아이디입니다."){
+          return;
+      } else{
+          setUser(sessionUser);
+      }
+      window.location.href = '/login';
+    }catch(error){
+      console.log("요청에 실패했습니다.", error);
+    }
+  }
 
   return (
     <>
       <Container>
         <Title>Sign Up</Title>
         <FormContainer>
-          <Input type="text" placeholder="ID" />
-          <Input type="password" placeholder="PW" />
-          <Input type="text" placeholder="NAME" />
-          <Input type="email" placeholder="EMAIL" />
-          <Input type="date" placeholder="BIRTHDAY" />
+          <Input type="text" placeholder="ID" onChange={(e)=> {id = e.target.value}}/>
+          <Input type="password" placeholder="PW" onChange={(e)=> {password = e.target.value}}/>
+          <Input type="text" placeholder="NAME" onChange={(e)=> {name = e.target.value}}/>
+          <Input type="email" placeholder="EMAIL" onChange={(e)=> {email = e.target.value}}/>
+          <Input type="date" placeholder="BIRTHDAY" onChange={(e)=> {birthday = e.target.value}}/>
           <ButtonContainer>
-            <Button>Sign Up</Button>
+            <Button onClick={()=>{signup()}}>Sign Up</Button>
           </ButtonContainer>
         </FormContainer>
       </Container>

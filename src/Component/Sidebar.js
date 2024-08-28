@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components';
 import logoImg from "./../images/logo/logo_white.png";
 import closeImg from "./../images/icon/close.png";
 import loginImg from "./../images/icon/login.png";
+import logoutImg from "./../images/icon/logout.png";
+import { SessionCurrent } from './SessionCurrent';
 
 // Simple shine animation using background
 const shine = keyframes`
@@ -74,16 +76,26 @@ const LogoIcon = styled.div`
 `;
 
 export function Sidebar({ isOpen, toggleMenu }) {
+  const { sessionUser } = SessionCurrent();
+
   return (
     <MenuContainer isOpen={isOpen}>
-      <LoginIcon to='/login' onClick={toggleMenu}>
+      {sessionUser=="anonymousUser"?<LoginIcon to='/login' onClick={toggleMenu}>
         <img
           src={loginImg}
           width="50"
           height="50"
           alt="login"
         />
-      </LoginIcon>
+      </LoginIcon>: null}
+      {sessionUser&&sessionUser!="anonymousUser"?<LoginIcon to='/logout' onClick={toggleMenu}>
+        <img
+          src={logoutImg}
+          width="50"
+          height="50"
+          alt="logout"
+        />
+      </LoginIcon>: null}
 
       <CloseButton onClick={toggleMenu}>
         <img

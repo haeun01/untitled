@@ -52,6 +52,7 @@ export function MyPage(){
                 <StyledLinkDetail to='/mypage/scrap' $bold={location.pathname=="/mypage/scrap"?true:false}>- 스크랩한 피드</StyledLinkDetail><br/>
                 <StyledLinkDetail to='/mypage/like' $bold={location.pathname=="/mypage/like"?true:false}>- 좋아요한 피드</StyledLinkDetail><br/>
                 <StyledLinkDetail to='/mypage/create' $bold={location.pathname=="/mypage/create"?true:false}>- 피드 작성</StyledLinkDetail><br/>
+                <StyledLinkDetail to={'/feed/user/'+sessionUser}>- 개인 피드</StyledLinkDetail><br/>
             </MypageLeft>
             <MypageRight>
                 <Outlet/>

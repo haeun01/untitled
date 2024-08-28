@@ -179,6 +179,39 @@ export function LikeTooltip(LikeUserList, func){
     </ScrollableContent>
 }
 
+const MyFeedBtn = styled.div`
+    cursor: pointer;
+    margin: 5px 0;
+    &:hover {
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+        transform: scale(1.03);
+    }
+`
+
+export function MyFeedTooltip(feed, deleteFunc, editFunc){
+    async function deleteBtn(){
+        try{
+            const responseLike = await axios.post("http://localhost:8080/api/deleteFeedLikeByFeed", {id:feed.id});
+            const responseScrap = await axios.post("http://localhost:8080/api/deleteFeedScrapByFeed", {id:feed.id});
+            const responseCommentLike = await axios.post("http://localhost:8080/api/deleteFeedCommentLikeByFeed", {id:feed.id});
+            const responseComment = await axios.post("http://localhost:8080/api/deleteFeedCommentByFeed", {id:feed.id});
+            const responseFeed = await axios.post("http://localhost:8080/api/deleteFeed", {id:feed.id});
+            deleteFunc()
+        }catch(error){
+            console.log("요청에 실패했습니다.", error);
+        }
+    } 
+
+    function editBtn(){
+        editFunc()
+    }
+
+    return <>
+        <MyFeedBtn onClick={()=>{deleteBtn()}}>삭제하기</MyFeedBtn>
+        <MyFeedBtn onClick={()=>{editBtn()}}>수정하기</MyFeedBtn>
+    </>
+}
+
 const ProfileImage = styled.img`
     width: 30px;
     height: 30px;

@@ -232,7 +232,7 @@ export function FeedUser(){
         {/* <ScrollableContent width="100%" height="500px"> */}
             <FeedContainer>
                 {feedList && feedList.map((feed, index)=>(
-                    <Img key={index} src={feed.image} onClick={()=>{navigate("/feed/"+feed.id)}}/>
+                    <Img key={index} src={feed.imageData? getServerImgFile(feed.imageData): feed.image} onClick={()=>{navigate("/feed/"+feed.id)}}/>
                 ))}
             </FeedContainer>
         {/* </ScrollableContent> */}

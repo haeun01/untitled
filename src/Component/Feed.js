@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FollowerTooltip, FollowingTooltip, LikeTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
+import { FollowerTooltip, FollowingTooltip, LikeTooltip, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +11,7 @@ import closeBtn from "./../img/x.png";
 import { SessionCurrent } from "./SessionCurrent";
 import { getServerImgFile } from "./File";
 import defaltUserImg from "./../img/defaltUserImg.png";
+import { FeedEdit } from "./FeedEdit";
 
 const Container = styled.div`
     display: grid;
@@ -118,6 +119,7 @@ export function Feed() {
     const navigate = useNavigate();
     const [sessionUserFollow, setSessionUserFollow] = useState();
     const [followChange, setFollowChange] = useState(false);
+    const [feedEdit, setFeedEdit] = useState(false);
 
     useEffect(() => {
         GetFeed()
@@ -336,6 +338,7 @@ export function Feed() {
 
     return <>
         {feed && follower && following? <div style={{padding:"40px 50px"}}>
+            {feedEdit? <div><FeedEdit feed={feed}/></div>:
             <Container>
                 <Contents>
                     <Flex style={{padding: "20px 30px", justifyContent:"space-between"}}>
@@ -355,11 +358,12 @@ export function Feed() {
                             </div>
                         </Flex>
                         {sessionUser!=feed.user.userId? sessionUserFollow? <FollowingBtn onClick={()=>{FollowClick()}}>팔로잉</FollowingBtn>: 
-                            <FollowerBtn onClick={()=>{FollowClick()}}>팔로우</FollowerBtn>: null
+                            <FollowerBtn onClick={()=>{FollowClick()}}>팔로우</FollowerBtn>: 
+                            <Tooltip tooltipContents={MyFeedTooltip(feed, ()=>{navigate(-1)}, ()=>{setFeedEdit(!feedEdit)})}><FollowerBtn>...</FollowerBtn></Tooltip>
                         }
                     </Flex>
 
-                    <img src={feed.image} style={{width: "100%"}}/>
+                    <img src={feed.imageData? getServerImgFile(feed.imageData): feed.image} style={{width: "100%"}}/>
                     <div style={{padding: "20px 30px"}}>
                         <Flex>
                             <img src={like? redheart: heart} style={{height: "25px", cursor:"pointer"}} onClick={()=>{LikeClick()}}/>
@@ -387,7 +391,7 @@ export function Feed() {
                         </Flex>
                     </CommentBox>
                 </div>
-            </Container>
+            </Container>}
         </div>: <div/>}
     </>
 }
