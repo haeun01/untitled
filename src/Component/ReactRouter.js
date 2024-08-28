@@ -11,6 +11,7 @@ import { FeedUser } from "./FeedUser";
 import { SignUp } from "./SignUp";
 import { ProfileEdit } from "./ProfileEdit";
 import { FeedCreate } from "./FeedCreate";
+import { LectureSearch } from "./LectureSearch";
 
 export function ReactRouter() {
   return <>
@@ -33,6 +34,7 @@ export function ReactRouter() {
           <Route path=":id" element={<Feed/>}></Route>
           <Route path="user/:id" element={<FeedUser/>}></Route>
         </Route>
+        <Route path="/lecturesearch" element={<LectureSearch/>}></Route>
       </Routes>
     </BrowserRouter>
   </>
