@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; 
+import axios from "axios";
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -57,12 +59,18 @@ const LectureList = styled.div`
 const LectureItem = styled.div`
   background-color: #fff;
   color: black;
-  padding: 20px;
-  padding-left: 40px;
-  margin-bottom: 15px;
-  border-radius: 15px; 
+  padding: 30px;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  border-radius: 15px;
   font-size: 25px;
-  `;
+  cursor: pointer; /* 클릭 가능한 항목으로 설정 */
+  transition: transform 0.2s ease, background-color 0.2s ease; /* 부드러운 전환 효과 */
+  &:hover {
+    background-color: #ccc; /* 호버 시 약간의 색상 변화 */
+    transform: scale(1.05); /* 호버 시 약간 확대 */
+  }
+`;
 
 const LectureTitle = styled.span`
   font-weight: bold;
@@ -77,13 +85,32 @@ const InfoText = styled.div`
 `
 
 export function LectureSearch() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [lectures, setLectures] = useState(["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4"]);
+  const [lectures, setLectures] = useState([{ id: 1, title: "Lecture 1", info: "Intro to Programming" }]);
+
+  const fetchLectures = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/lectures");
+      setLectures(response.data);
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLectures();
+  }, [])
 
   const handleSearch = () => {
-    // 검색 로직 추가
     alert(`Searching for: ${searchQuery}`);
   };
+
+  // 강의 상세 페이지 이동
+  const handleLectureClick = (id) => {
+    navigate(`/lecture/${id}`);
+  }
+  
 
   return (
     <>
@@ -98,10 +125,10 @@ export function LectureSearch() {
           <SearchButton onClick={handleSearch}>🔗</SearchButton>
         </SearchContainer>
         <LectureList>
-          {lectures.map((lecture, index) => (
-            <LectureItem key={index}>
-              <LectureTitle>{lecture}</LectureTitle>
-              <InfoText>info</InfoText>
+          {lectures.map((lecture) => (
+            <LectureItem key={lecture.id} onClick={() => handleLectureClick(lecture.id)}>
+              <LectureTitle>{lecture.title}</LectureTitle>
+              <InfoText>{lecture.info}</InfoText>
             </LectureItem>
           ))}
         </LectureList>

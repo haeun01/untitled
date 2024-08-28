@@ -12,31 +12,34 @@ import { SignUp } from "./SignUp";
 import { ProfileEdit } from "./ProfileEdit";
 import { FeedCreate } from "./FeedCreate";
 import { LectureSearch } from "./LectureSearch";
-
+import { LectureDetail } from "./LectureDetail";
 
 export function ReactRouter() {
-  return <>
-    <BrowserRouter>
-      <Navbar/>
-      <Routes>
-        <Route path='/' element={<Intro/>}></Route>
-        <Route path='/intro' element={<Intro/>}></Route>
-        <Route path='/login' element={<Login/>}></Route>
-         <Route path='/signup' element={<SignUp/>}></Route>
-        {/*<Route path='/logout' element={<Logout/>}></Route> */}
-        <Route path='/mypage' element={<MyPage/>}>
-          <Route path='edit' element={<MyPageEdit/>}></Route>
-          <Route path='profile' element={<ProfileEdit/>}></Route>
-          <Route path='scrap' element={<FeedList/>}></Route>
-          <Route path='like' element={<FeedList/>}></Route>
-          <Route path='create' element={<FeedCreate/>}></Route>
-        </Route>
-        <Route path='/feed' element={<Wrapper/>}>
-          <Route path=":id" element={<Feed/>}></Route>
-          <Route path="user/:id" element={<FeedUser/>}></Route>
-        </Route>
-        <Route path="/lecturesearch" element={<LectureSearch/>}></Route>
-      </Routes>
-    </BrowserRouter>
-  </>
+  return (
+    <>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Intro />} />
+          <Route path="/intro" element={<Intro />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/mypage" element={<MyPage />}>
+            <Route path="edit" element={<MyPageEdit />} />
+            <Route path="profile" element={<ProfileEdit />} />
+            <Route path="scrap" element={<FeedList />} />
+            <Route path="like" element={<FeedList />} />
+            <Route path="create" element={<FeedCreate />} />
+          </Route>
+          <Route path="/feed" element={<Wrapper />}>
+            <Route path=":id" element={<Feed />} />
+            <Route path="user/:id" element={<FeedUser />} />
+          </Route>
+          {/* 중첩된 경로를 피하고 LectureDetail을 같은 레벨로 설정 */}
+          <Route path="/lecturesearch" element={<LectureSearch />} />
+          <Route path="/lecture/:id" element={<LectureDetail />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
