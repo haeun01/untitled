@@ -10,6 +10,7 @@ import { Feed } from "./Feed";
 import { FeedUser } from "./FeedUser";
 import { SignUp } from "./SignUp";
 import { ProfileEdit } from "./ProfileEdit";
+import { FeedCreate } from "./FeedCreate";
 
 export function ReactRouter() {
   return <>
@@ -26,6 +27,7 @@ export function ReactRouter() {
           <Route path='profile' element={<ProfileEdit/>}></Route>
           <Route path='scrap' element={<FeedList/>}></Route>
           <Route path='like' element={<FeedList/>}></Route>
+          <Route path='create' element={<FeedCreate/>}></Route>
         </Route>
         <Route path='/feed' element={<Wrapper/>}>
           <Route path=":id" element={<Feed/>}></Route>
