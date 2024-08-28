@@ -18,7 +18,7 @@ const Container = styled.div`
 
 const TitleBar = styled.div`
   width: 100%;
-  max-width: 1300px; /* 최대 너비 증가 */
+  max-width: 1500px; /* 최대 너비 증가 */
   text-align: left;
   margin-bottom: 30px; /* 하단 여백 증가 */
 `;
@@ -33,7 +33,7 @@ const VideoTitle = styled.h1`
 const ContentArea = styled.div`
   display: flex;
   width: 100%;
-  max-width: 1300px; /* 최대 너비 증가 */
+  max-width: 1500px;
   justify-content: space-between; /* 요소들을 양쪽 끝에 정렬 */
   align-items: flex-start; /* 상단 정렬 */
   gap: 30px; /* 요소 간의 간격 증가 */
@@ -48,17 +48,15 @@ const VideoPlayer = styled.div`
   align-items: center;
   justify-content: center;
   color: white;
-  border-radius: 10px;
-  margin-right: 20px; /* 오른쪽 간격 증가 */
+  /* margin-right: 20px;  */
 `;
 
 const ChatSection = styled.div`
-  flex: 2;
+  /* flex: 2; */
   width: 400px; /* 채팅 섹션의 고정 너비 증가 */
   height: 600px; /* VideoPlayer와 동일한 높이로 설정 */
   background-color: white;
   padding: 20px;
-  border-radius: 10px;
   box-sizing: border-box;
   overflow-y: auto;
 `;
