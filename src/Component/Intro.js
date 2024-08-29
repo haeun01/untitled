@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Navbar } from "./Navbar";
 
@@ -46,6 +46,28 @@ const Rectangle = styled.div`
   border-style: solid;
   width: 90%;
   height: 100%;
+  position: relative; /* 커서 위치를 컨테이너 안에서만 설정 */
+  overflow: hidden;
+`;
+
+// 커서 스타일 정의
+const Cursor = styled.div`
+  opacity: 0;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%) scale(0.5);
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+  transition-property: background, transform;
+  transition-duration: 0.4s;
+
+  &.on {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 `;
 
 export function Intro() {
@@ -54,9 +76,13 @@ export function Intro() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
   const [delta, setDelta] = useState(150); // 타이핑과 삭제의 속도를 동일하게 설정
-  const toRotate = ["EVERYONE", "FRIENDS", "BEAUTY","UNTITLED"]; // 타이핑할 텍스트 배열
+  const toRotate = ["EVERYONE", "FRIENDS", "BEAUTY", "UNTITLED"]; // 타이핑할 텍스트 배열
   const period = 2000; // 완전한 텍스트가 화면에 유지되는 시간
-  const extendedPeriod = 10000; // 마지막 글자에서 더 오래 머무르는 시간
+  const cursorRef = useRef(null); // 커서 요소 참조를 위한 useRef 사용
+  const containerRef = useRef(null); // 사각형 컨테이너 참조를 위한 useRef 사용
+
+  // 커서 상태 정의
+  const [cursorClass, setCursorClass] = useState("");
 
   // 타이핑 효과 로직
   useEffect(() => {
@@ -84,10 +110,52 @@ export function Intro() {
     return () => clearTimeout(ticker);
   }, [text, isDeleting, delta, loopNum]);
 
+  // 마우스 커서 효과 로직
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    const container = containerRef.current;
+
+    if (!cursor || !container) return; // 참조가 유효할 때만 진행
+
+    function cursorEvent(e) {
+      const rect = container.getBoundingClientRect();
+      const cursorSize = 800 / 2; // 커서 반경이 400px이므로, 커서가 컨테이너 경계 내에 있도록 제한
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+
+      // 커서가 컨테이너 경계를 넘어가지 않도록 제한
+      if (x < cursorSize) x = cursorSize;
+      if (y < cursorSize) y = cursorSize;
+      if (x > rect.width - cursorSize) x = rect.width - cursorSize;
+      if (y > rect.height - cursorSize) y = rect.height - cursorSize;
+
+      cursor.style.top = y + "px";
+      cursor.style.left = x + "px";
+    }
+
+    function handleMouseEnter() {
+      setCursorClass("on");
+    }
+
+    function handleMouseLeave() {
+      setCursorClass("");
+    }
+
+    container.addEventListener("mousemove", cursorEvent);
+    container.addEventListener("mouseenter", handleMouseEnter);
+    container.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      container.removeEventListener("mousemove", cursorEvent);
+      container.removeEventListener("mouseenter", handleMouseEnter);
+      container.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
   return (
     <>
       <Container>
-        <Rectangle>
+        <Rectangle ref={containerRef}>
           <Logo>
             <a href="#">
               <img
@@ -105,6 +173,7 @@ export function Intro() {
           </h3>
         </Rectangle>
       </Container>
+      <Cursor className={`cursor ${cursorClass}`} ref={cursorRef} />
     </>
   );
 }

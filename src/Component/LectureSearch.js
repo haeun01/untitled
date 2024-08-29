@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // 컨테이너 스타일
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* 수직 정렬 */
+  align-items: center; /* 위쪽에 정렬 */
   width: 100%;
   height: 100vh;
   background-color: black;
-  padding: 40px;
+  padding: 0; /* padding 제거 */
+  box-sizing: border-box; /* border-box 설정 */
 `;
 
 // 검색바 컨테이너 스타일
 const SearchContainer = styled.div`
   display: flex;
-  align-items: center; 
-  width: 500px;
-  margin-bottom: 15px;
+  align-items: center;
+  justify-content: center; /* 가운데 정렬 */
+  width: 100%; /* 전체 너비 사용 */
+  max-width: 1200px; /* 최대 너비 설정 */
+  margin: 20px auto; /* 상하 마진 추가 및 가운데 정렬 */
 `;
 
 // 검색 입력 스타일
 const SearchInput = styled.input`
-
   flex: 1;
   height: 30px;
   border: 1px solid white;
@@ -38,21 +40,21 @@ const SearchInput = styled.input`
 
 // 검색 버튼 스타일
 const SearchButton = styled.button`
-  width: 70px; 
-  height: 30px; 
+  width: 70px;
+  height: 30px;
   border: 1px solid white;
   background-color: white;
   color: black;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-
 `;
 
 // 강의 리스트 스타일
 const LectureList = styled.div`
-  width: 500px;
-
+  width: 100%; /* 전체 너비 사용 */
+  max-width: 1200px; /* 최대 너비 설정 */
+  margin: 0 auto; /* 가운데 정렬 */
 `;
 
 // 강의 항목 스타일
@@ -64,25 +66,24 @@ const LectureItem = styled.div`
   margin-bottom: 10px;
   border-radius: 15px;
   font-size: 25px;
-  cursor: pointer; /* 클릭 가능한 항목으로 설정 */
-  transition: transform 0.2s ease, background-color 0.2s ease; /* 부드러운 전환 효과 */
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
   &:hover {
-    background-color: #ccc; /* 호버 시 약간의 색상 변화 */
-    transform: scale(1.05); /* 호버 시 약간 확대 */
+    background-color: #ccc;
+    transform: scale(1.05);
   }
 `;
 
 const LectureTitle = styled.span`
   font-weight: bold;
   font-weight: 500;
-
-`
+`;
 
 const InfoText = styled.div`
   font-size: 18px;
   color: black;
   margin-top: 5px;
-`
+`;
 
 export function LectureSearch() {
   const navigate = useNavigate();
@@ -100,17 +101,15 @@ export function LectureSearch() {
 
   useEffect(() => {
     fetchLectures();
-  }, [])
+  }, []);
 
   const handleSearch = () => {
     alert(`Searching for: ${searchQuery}`);
   };
 
-  // 강의 상세 페이지 이동
   const handleLectureClick = (id) => {
     navigate(`/lecture/${id}`);
-  }
-  
+  };
 
   return (
     <>

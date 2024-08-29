@@ -62,12 +62,11 @@ const ChatSection = styled.div`
 `;
 
 export function LectureDetail() {
-  const { id } = useParams(); // URL에서 강의 ID를 가져옴
+  const { id } = useParams(); 
   const [videoData, setVideoData] = useState(null); // 비디오 데이터를 저장할 상태
   const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지를 저장할 상태
 
   useEffect(() => {
-    // 백엔드에서 비디오 데이터 가져오기
     axios.get(`/api/lectures/${id}`)
       .then(response => {
         setVideoData(response.data.videoUrl); // 비디오 URL 설정
