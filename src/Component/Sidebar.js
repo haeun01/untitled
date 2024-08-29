@@ -107,7 +107,7 @@ export function Sidebar({ isOpen, toggleMenu }) {
       </CloseButton>
 
       <MenuLink to='/intro' onClick={toggleMenu}>INTRO</MenuLink>
-      <MenuLink to="/feed/1" onClick={toggleMenu}>FEED</MenuLink>
+      <MenuLink to="/feed/home" onClick={toggleMenu}>FEED</MenuLink>
       <MenuLink to="/lecturesearch" onClick={toggleMenu}>LECTURE</MenuLink>
       <MenuLink to="/mypage" onClick={toggleMenu}>MYPAGE</MenuLink>
 

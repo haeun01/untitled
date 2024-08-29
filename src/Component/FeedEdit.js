@@ -86,26 +86,24 @@ export function FeedEdit({feed}){
     }
 
     async function editBtnClick() {
+        const formData = new FormData();
         if(imageSendFile!=null){
-            const formData = new FormData();
             formData.append("file", imageSendFile);
-            formData.append("id", feed.id);
-            formData.append("text", text);
-            console.log(1, formData)
-            try {
-                const response = await axios.post("http://localhost:8080/api/updateFeed", formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                console.log("img",response.data);
-            } catch (error) {
-                console.error("요청에 실패했습니다.", error.response ? error.response.data : error.message);
-            }
-            window.location.href = '/feed/' + feed.id;
-        }else{
-            alert("이미지 파일을 업로드해주세요.");
         }
+        formData.append("id", feed.id);
+        formData.append("text", text);
+        console.log(1, formData)
+        try {
+            const response = await axios.post("http://localhost:8080/api/updateFeed", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log("img",response.data);
+        } catch (error) {
+            console.error("요청에 실패했습니다.", error.response ? error.response.data : error.message);
+        }
+        window.location.href = '/feed/' + feed.id;
     }
 
 

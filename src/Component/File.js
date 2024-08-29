@@ -1,5 +1,14 @@
 // 서버에서 받은 그림 파일을 변환하여 src에 넣을 값 리턴
 export function getServerImgFile(base64) {
+    const byteArrays = getServerImgByteArrays(base64);
+
+    const blob = new Blob(byteArrays, { type: 'image/png' });
+
+    return URL.createObjectURL(blob);
+}
+
+// 서버에서 받은 그림 파일을 바이트배열로 변환하여 리턴
+export function getServerImgByteArrays(base64) {
     const byteCharacters = atob(base64);
     const byteArrays = [];
 
@@ -15,8 +24,5 @@ export function getServerImgFile(base64) {
         byteArrays.push(byteArray);
     }
 
-    // 기본적으로 image/png MIME 타입을 사용
-    const blob = new Blob(byteArrays, { type: 'image/png' });
-
-    return URL.createObjectURL(blob);
+    return byteArrays;
 }
