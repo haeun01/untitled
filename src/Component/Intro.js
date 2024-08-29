@@ -118,19 +118,8 @@ export function Intro() {
     if (!cursor || !container) return; // 참조가 유효할 때만 진행
 
     function cursorEvent(e) {
-      const rect = container.getBoundingClientRect();
-      const cursorSize = 800 / 2; // 커서 반경이 400px이므로, 커서가 컨테이너 경계 내에 있도록 제한
-      let x = e.clientX - rect.left;
-      let y = e.clientY - rect.top;
-
-      // 커서가 컨테이너 경계를 넘어가지 않도록 제한
-      if (x < cursorSize) x = cursorSize;
-      if (y < cursorSize) y = cursorSize;
-      if (x > rect.width - cursorSize) x = rect.width - cursorSize;
-      if (y > rect.height - cursorSize) y = rect.height - cursorSize;
-
-      cursor.style.top = y + "px";
-      cursor.style.left = x + "px";
+      cursor.style.top = e.pageY + "px";
+      cursor.style.left = e.pageX + "px";
     }
 
     function handleMouseEnter() {
