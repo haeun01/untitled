@@ -173,7 +173,7 @@ export function FollowingTooltip(followingList, func){
 }
 
 export function LikeTooltip(LikeUserList, func){
-    console.log(LikeUserList)
+    // console.log(LikeUserList)
     return <ScrollableContent width="300px" height="300px">
         {LikeUserList && LikeUserList.map((likeUser, index)=>(<UserBarContent key={index} user={likeUser.user} func={func}/>))}
     </ScrollableContent>

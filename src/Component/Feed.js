@@ -337,9 +337,10 @@ export function Feed() {
     }
 
     return <>
-        {feed && follower && following? <div style={{padding:"40px 50px"}}>
+        {feed && follower && following? <div style={{padding:"0 50px"}}>
             {feedEdit? <div><FeedEdit feed={feed}/></div>:
-            <Container>
+            <Container><div>
+                <div style={{fontSize:"20px", fontWeight:"bold", cursor:"pointer", padding:"0 0 10px 0", width:"10px"}} onClick={()=>{navigate(-1)}}>Back</div>
                 <Contents>
                     <Flex style={{padding: "20px 30px", justifyContent:"space-between"}}>
                         <Flex>
@@ -374,7 +375,7 @@ export function Feed() {
                         </Flex>
                         <div style={{marginTop: "20px"}}>{feed.text}</div>
                     </div>
-                </Contents>
+                </Contents></div>
                 <div>
                     <CommentBox>
                         <div>
