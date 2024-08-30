@@ -6,23 +6,23 @@ import axios from "axios";
 // 컨테이너 스타일
 const Container = styled.div`
   display: flex;
-  flex-direction: column; /* 수직 정렬 */
-  align-items: center; /* 위쪽에 정렬 */
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100vh;
   background-color: black;
-  padding: 0; /* padding 제거 */
-  box-sizing: border-box; /* border-box 설정 */
+  padding: 0;
+  box-sizing: border-box;
 `;
 
 // 검색바 컨테이너 스타일
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center; /* 가운데 정렬 */
-  width: 100%; /* 전체 너비 사용 */
-  max-width: 1200px; /* 최대 너비 설정 */
-  margin: 20px auto; /* 상하 마진 추가 및 가운데 정렬 */
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
 `;
 
 // 검색 입력 스타일
@@ -52,9 +52,9 @@ const SearchButton = styled.button`
 
 // 강의 리스트 스타일
 const LectureList = styled.div`
-  width: 100%; /* 전체 너비 사용 */
-  max-width: 1200px; /* 최대 너비 설정 */
-  margin: 0 auto; /* 가운데 정렬 */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 // 강의 항목 스타일
@@ -62,7 +62,6 @@ const LectureItem = styled.div`
   background-color: #fff;
   color: black;
   padding: 30px;
-  padding-left: 20px;
   margin-bottom: 10px;
   border-radius: 15px;
   font-size: 25px;
@@ -76,7 +75,6 @@ const LectureItem = styled.div`
 
 const LectureTitle = styled.span`
   font-weight: bold;
-  font-weight: 500;
 `;
 
 const InfoText = styled.div`
@@ -88,50 +86,73 @@ const InfoText = styled.div`
 export function LectureSearch() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [lectures, setLectures] = useState([{ id: 1, title: "Lecture 1", info: "Intro to Programming" }]);
+  const [lectures, setLectures] = useState([]);
 
+  // 강의 목록 불러오는 함수
   const fetchLectures = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/lectures");
+      const response = await axios.get("http://localhost:8080/findAllLecture");
       setLectures(response.data);
     } catch (error) {
-      console.error("Error", error);
+      console.error("강의 목록 불러오기 오류: ", error);
     }
   };
 
+  // 검색 핸들러
+  const handleSearch = async () => {
+    if (searchQuery.trim() === "") {
+      alert("검색어를 입력해 주세요.");
+      return;
+    }
+
+    try {
+      const response = await axios.get("http://localhost:8080/search", {
+        params: { query: searchQuery }
+      });
+
+      if (response.data.length > 0) {
+        setLectures(response.data);
+      } else {
+        alert("검색 결과가 없습니다.");
+        fetchLectures(); // 기본 강의 목록 불러오기
+      }
+    } catch (error) {
+      console.error("검색 중 오류 발생: ", error);
+      alert("검색 중 오류가 발생했습니다.");
+      fetchLectures(); // 기본 강의 목록 불러오기
+    }
+  };
+
+  // 컴포넌트가 처음 렌더링될 때 기본 강의 목록 불러오기
   useEffect(() => {
     fetchLectures();
   }, []);
 
-  const handleSearch = () => {
-    alert(`Searching for: ${searchQuery}`);
-  };
-
+  // 강의 클릭 시 이동
   const handleLectureClick = (id) => {
     navigate(`/lecture/${id}`);
   };
 
   return (
-    <>
-      <Container>
-        <SearchContainer>
-          <SearchInput
-            type="text"
-            placeholder="LECTURE SEARCH"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <SearchButton onClick={handleSearch}>🔗</SearchButton>
-        </SearchContainer>
-        <LectureList>
-          {lectures.map((lecture) => (
-            <LectureItem key={lecture.id} onClick={() => handleLectureClick(lecture.id)}>
-              <LectureTitle>{lecture.title}</LectureTitle>
-              <InfoText>{lecture.info}</InfoText>
-            </LectureItem>
-          ))}
-        </LectureList>
-      </Container>
-    </>
+    <Container>
+      <SearchContainer>
+        <SearchInput
+          type="text"
+          placeholder="LECTURE SEARCH"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <SearchButton onClick={handleSearch}>🔗</SearchButton>
+      </SearchContainer>
+      <LectureList>
+        {lectures.map((lecture) => (
+          <LectureItem key={lecture.id} onClick={() => handleLectureClick(lecture.id)}>
+            <LectureTitle>{lecture.lectureName}</LectureTitle>
+            <InfoText>{lecture.teacher.user.userName}</InfoText>
+            <InfoText>{lecture.createdAt}</InfoText>
+          </LectureItem>
+        ))}
+      </LectureList>
+    </Container>
   );
 }

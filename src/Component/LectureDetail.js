@@ -67,7 +67,7 @@ export function LectureDetail() {
   const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지를 저장할 상태
 
   useEffect(() => {
-    axios.get(`/api/lectures/${id}`)
+    axios.get(`/api/lecture/${id}`)
       .then(response => {
         setVideoData(response.data.videoUrl); // 비디오 URL 설정
         setChatMessages(response.data.chatMessages); // 초기 채팅 메시지 설정
