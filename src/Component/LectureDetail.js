@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom"; 
-import axios from "axios"; 
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
-// 스타일 컴포넌트
+// 스타일 컴포넌트 (기존 코드 유지)
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,21 +14,21 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: black;
-  padding: 30px; /* 패딩을 약간 확대 */
+  padding: 30px;
   box-sizing: border-box;
 `;
 
 const TitleBar = styled.div`
   width: 100%;
-  max-width: 1500px; /* 최대 너비 증가 */
+  max-width: 1500px;
   text-align: left;
-  margin-bottom: 30px; /* 하단 여백 증가 */
+  margin-bottom: 30px;
 `;
 
 const VideoTitle = styled.h1`
   color: white;
   font-weight: 300;
-  font-size: 40px; /* 글자 크기 증가 */
+  font-size: 40px;
   margin: 0;
 `;
 
@@ -34,59 +36,105 @@ const ContentArea = styled.div`
   display: flex;
   width: 100%;
   max-width: 1500px;
-  justify-content: space-between; /* 요소들을 양쪽 끝에 정렬 */
-  align-items: flex-start; /* 상단 정렬 */
-  gap: 30px; /* 요소 간의 간격 증가 */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
 `;
 
 const VideoPlayer = styled.div`
   flex: 4;
-  width: 850px; /* 비디오 플레이어의 고정 너비 증가 */
-  height: 600px; /* 비디오 플레이어의 고정 높이 증가 */
+  width: 850px;
+  height: 600px;
   background-color: #444;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  /* margin-right: 20px;  */
 `;
 
 const ChatSection = styled.div`
-  /* flex: 2; */
-  width: 400px; /* 채팅 섹션의 고정 너비 증가 */
-  height: 600px; /* VideoPlayer와 동일한 높이로 설정 */
+  width: 400px;
+  height: 600px;
   background-color: white;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
 `;
 
+const ChatInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+`;
+
+const ChatButton = styled.button`
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+`;
+
 export function LectureDetail() {
-  const { id } = useParams(); 
-  const [videoData, setVideoData] = useState(null); // 비디오 데이터를 저장할 상태
+  const { id } = useParams(); // URL에서 강의 ID 가져오기
+  const [lectureData, setLectureData] = useState(null); // 강의 데이터를 저장할 상태
   const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지를 저장할 상태
+  const [message, setMessage] = useState(""); // 입력한 메시지 상태
+  const stompClient = useRef(null);
 
   useEffect(() => {
+    // 강의 데이터 가져오기
     axios.get(`/api/lecture/${id}`)
       .then(response => {
-        setVideoData(response.data.videoUrl); // 비디오 URL 설정
-        setChatMessages(response.data.chatMessages); // 초기 채팅 메시지 설정
+        setLectureData(response.data);
+        setChatMessages(response.data.chatMessages || []);
       })
       .catch(error => {
         console.error("Error fetching lecture data:", error);
       });
+
+    // WebSocket 연결 설정
+    const socket = new SockJS('http://localhost:8080/ws'); // 서버 주소와 일치하도록 수정
+    stompClient.current = Stomp.over(socket);
+    stompClient.current.connect({}, () => {
+      stompClient.current.subscribe(`/topic/public`, (messageOutput) => {
+        const receivedMessage = JSON.parse(messageOutput.body);
+        setChatMessages(prevMessages => [...prevMessages, receivedMessage.content]);
+      });
+    });
+
+    return () => {
+      if (stompClient.current) {
+        stompClient.current.disconnect();
+      }
+    };
   }, [id]);
+
+  const sendMessage = () => {
+    if (stompClient.current && message.trim() !== "") {
+      const chatMessage = {
+        sender: "User", // 임의의 사용자 이름 사용 또는 로그인 사용자 이름 사용
+        content: message,
+        type: "CHAT"
+      };
+      stompClient.current.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+      setMessage(""); // 입력란 초기화
+    }
+  };
 
   return (
     <Container>
       <TitleBar>
-        <VideoTitle>Lecture {id} 👀</VideoTitle>
+        <VideoTitle>{lectureData ? lectureData.lecture_name : 'Loading...'} 👀</VideoTitle>
       </TitleBar>
       <ContentArea>
         <VideoPlayer>
-          {videoData ? (
+          {lectureData ? (
             <video width="100%" height="100%" controls>
-              <source src={videoData} type="video/mp4" />
+              <source src={lectureData.url} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           ) : (
@@ -94,7 +142,6 @@ export function LectureDetail() {
           )}
         </VideoPlayer>
         <ChatSection>
-          {/* 실시간 채팅 공간 */}
           {chatMessages.length > 0 ? (
             chatMessages.map((message, index) => (
               <p key={index}>{message}</p>
@@ -102,6 +149,13 @@ export function LectureDetail() {
           ) : (
             <p>Loading Chat...</p>
           )}
+          <ChatInput
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message here..."
+          />
+          <ChatButton onClick={sendMessage}>Send</ChatButton>
         </ChatSection>
       </ContentArea>
     </Container>
