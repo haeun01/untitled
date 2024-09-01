@@ -91,7 +91,7 @@ export function LectureSearch() {
   // 강의 목록 불러오는 함수
   const fetchLectures = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/findAllLecture");
+      const response = await axios.get("/api/findAllLecture");
       setLectures(response.data);
     } catch (error) {
       console.error("강의 목록 불러오기 오류: ", error);
@@ -106,7 +106,7 @@ export function LectureSearch() {
     }
 
     try {
-      const response = await axios.get("http://localhost:8080/search", {
+      const response = await axios.get("http://localhost:8080/api/search", {
         params: { query: searchQuery }
       });
 
@@ -148,7 +148,7 @@ export function LectureSearch() {
         {lectures.map((lecture) => (
           <LectureItem key={lecture.id} onClick={() => handleLectureClick(lecture.id)}>
             <LectureTitle>{lecture.lectureName}</LectureTitle>
-            <InfoText>{lecture.teacher.user.userName}</InfoText>
+            {/* <InfoText>{lecture.teacher.user.userName}</InfoText> */}
             <InfoText>{lecture.createdAt}</InfoText>
           </LectureItem>
         ))}

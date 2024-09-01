@@ -97,7 +97,7 @@ export function LectureDetail() {
       });
 
     // WebSocket 연결 설정
-    const socket = new SockJS('http://localhost:8080/ws'); // 서버 주소와 일치하도록 수정
+    const socket = new SockJS('http://localhost:8080/ws');
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect({}, () => {
       stompClient.current.subscribe(`/topic/public`, (messageOutput) => {
