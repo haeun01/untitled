@@ -9,10 +9,11 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: black;
   padding: 0;
   box-sizing: border-box;
+  /* margin-bottom: 100px; */
 `;
 
 // 검색바 컨테이너 스타일
@@ -22,7 +23,8 @@ const SearchContainer = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 1200px;
-  margin: 20px auto;
+  margin-top: 20px;
+  margin-bottom: 40px;
 `;
 
 // 검색 입력 스타일
@@ -54,7 +56,7 @@ const SearchButton = styled.button`
 const LectureList = styled.div`
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin-bottom: 60px;
 `;
 
 // 강의 항목 스타일
@@ -62,7 +64,7 @@ const LectureItem = styled.div`
   background-color: #fff;
   color: black;
   padding: 30px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border-radius: 15px;
   font-size: 25px;
   cursor: pointer;
@@ -81,6 +83,13 @@ const InfoText = styled.div`
   font-size: 18px;
   color: black;
   margin-top: 5px;
+`;
+
+const Logo = styled.div`
+  width: 100px;
+  height: 100px;
+  margin-bottom: 100px;
+  
 `;
 
 export function LectureSearch() {
@@ -149,10 +158,20 @@ export function LectureSearch() {
           <LectureItem key={lecture.id} onClick={() => handleLectureClick(lecture.id)}>
             <LectureTitle>{lecture.lectureName}</LectureTitle>
             {/* <InfoText>{lecture.teacher.user.userName}</InfoText> */}
-            <InfoText>{lecture.createdAt}</InfoText>
+            <InfoText>{lecture.description}</InfoText>
           </LectureItem>
         ))}
       </LectureList>
+      <Logo>
+            <a href="#">
+              <img
+                src="./images/logo/logo_white.png"
+                width="100"
+                height="100"
+                alt="untitled_logo"
+              />
+            </a>
+          </Logo>
     </Container>
   );
 }
