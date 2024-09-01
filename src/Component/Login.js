@@ -21,7 +21,7 @@ const Title = styled.h1`
   font-weight: 100;
   font-size: 80px;
   color: white;
-  margin-bottom: 40px;
+  margin-bottom: 40px 0; 
 `;
 
 // 폼 컨테이너 스타일

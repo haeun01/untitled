@@ -1,36 +1,75 @@
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
-import { Title } from "./Styles"
 import axios from "axios"
 import { SessionCurrent } from "./SessionCurrent"
 
+// 얇은 텍스트 스타일
+const Title = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 100;
+    font-size: 80px;
+    color: white;
+    margin-bottom: 40px;
+`;
+
 const Container = styled.div`
-    background-color: white;
     color: black;
     padding: 100px 0;
     width: 50%;
     margin: auto;
-    border-radius: 20px;
+    display: columns;
+    justify-content: center;
+    align-items: center;
 `
 
 const Div = styled.div`
-    font-size: 35px;
+    font-size: 25px;
+    color: white;
     text-align: center;
     font-weight: bold;
     margin-bottom: 70px;
+    font-weight: 100;
+
 `
 
-const LoginBtn = styled.div`
-    border-radius: 50px;
-    background-color: #222;
-    color: white;
-    width: 50%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    text-align: center;
-    font-size: 25px;
-    margin: 10px auto;
-    cursor: pointer;
+// const LoginBtn = styled.div`
+//     border-radius: 50px;
+//     background-color: white;
+//     color: black;
+//     width: 50%;
+//     padding-top: 20px;
+//     padding-bottom: 20px;
+//     text-align: center;
+//     font-size: 25px;
+//     margin: 10px auto;
+//     cursor: pointer;
+// `
+
+const Button = styled.button`
+  width: 40%;
+  padding: 10px;
+  margin: 10px 10px;
+  border: 1px solid white;
+  border-radius: 30px;
+  background-color: ${props => (props.primary ? "white" : "black")};
+  color: ${props => (props.primary ? "black" : "white")};
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* 부드러운 전환 효과 추가 */
+
+  &:hover {
+    background-color: ${props => (props.primary ? "#561689" : "black")};
+    color: ${props => (props.primary ? "black" : "white")}; 
+    border: ${props => (props.primary ? "none" : "1px solid white")}; 
+  }
+`;
+
+const BtnContainer = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
 `
 
 export function Logout(){
@@ -50,11 +89,13 @@ export function Logout(){
     }
 
     return <>
+    <Container>
         <Title>Logout</Title>
-        <Container>
-            <Div>{sessionUser+"님 로그아웃 하시겠습니까?"}</Div>
-            <LoginBtn onClick={()=>{logout()}}>로그아웃</LoginBtn>
-            <LoginBtn onClick={()=>{navigate("/")}}>돌아가기</LoginBtn>
+            <Div><strong>{sessionUser}</strong>님 로그아웃 하시겠습니까?</Div>
+            <BtnContainer>
+            <Button onClick={()=>{logout()}}>Logout</Button>
+            <Button onClick={()=>{navigate("/")}}>Back</Button>
+            </BtnContainer>
         </Container>
     </>
 }
