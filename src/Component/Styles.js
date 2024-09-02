@@ -3,6 +3,8 @@ import { SessionCurrent } from "./SessionCurrent";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getServerImgFile } from "./File";
+import defaltUserImg from "./../img/defaltUserImg.png";
 
 export const Title = styled.div`
     font-size: 50px;
@@ -341,7 +343,7 @@ function UserBarContent({user, func}){
     
     return <>
         <TooltipFlex>
-            <ProfileImage src={user.profileImg} onClick={()=>{navigate("/feed/user/"+user.userId)}}/>
+            <ProfileImage src={user.data? getServerImgFile(user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+user.userId)}}/>
             <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", width: "100%"}}>
                 <div>
                     <div>{user.userId}</div>

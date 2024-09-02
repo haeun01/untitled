@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { FollowerTooltip, FollowingTooltip, ScrollableContent, Tooltip } from "./Styles";
 import { getServerImgFile } from "./File";
 import defaltUserImg from "./../img/defaltUserImg.png";
+import logo from "./../images/logo/logo_white.png";
 
 
 const Container = styled.div`
@@ -66,6 +67,19 @@ const Btn = styled.div`
         color: white;
     }
 `
+
+const Logo = styled.div`
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  animation: rotate_image 10s linear infinite;
+  transform-origin: 50% 50%;
+  @keyframes rotate_image {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
 
 export function FeedUser(){
     const { id } = useParams();
@@ -197,7 +211,7 @@ export function FeedUser(){
     }
 
     return <Container>
-        {user? <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
+        {user? <div><div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
             <Flex style={{marginBottom:"20px", gap:"10%", width:"100%"}}>
                 <ProfileImg src={user.data? getServerImgFile(user.data): defaltUserImg}/>
                 {follower && following && feedList? <FlexC style={{width:"100%"}}>
@@ -226,15 +240,22 @@ export function FeedUser(){
                     <div style={{fontSize:"30px", fontWeight:"bold", marginTop:"20px"}}>{id}</div>
                     <ProfileText>{user.profileText}</ProfileText>
                 </FlexC>: null}
-            </Flex>
-        </div>: null}
-        <div style={{borderTop:"1px solid white", margin:"30px 0"}}></div>
-        {/* <ScrollableContent width="100%" height="500px"> */}
+            </Flex></div>
+            <div style={{borderTop:"1px solid white", margin:"30px 0"}}></div>
             <FeedContainer>
                 {feedList && feedList.map((feed, index)=>(
                     <Img key={index} src={feed.imageData? getServerImgFile(feed.imageData): feed.image} onClick={()=>{navigate("/feed/"+feed.id)}}/>
                 ))}
             </FeedContainer>
-        {/* </ScrollableContent> */}
+        </div>: <div><Logo>
+            <img
+              src={logo}
+              width="200"
+              height="200"
+              alt="untitled_logo"
+            />
+        </Logo>
+        <div style={{textAlign:"center", fontWeight:"bold", fontSize:"30px", margin:"20px"}}>로딩중입니다.</div></div>}
+        
     </Container>
 }
