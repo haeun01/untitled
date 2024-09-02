@@ -5,6 +5,7 @@ import axios from "axios";
 import { SessionCurrent } from "./SessionCurrent";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getServerImgFile } from "./File";
 
 const Container = styled.div`
     display: grid;
@@ -65,7 +66,7 @@ export function FeedList() {
             <Title style={{padding: "20px"}}>Feed {location.pathname=="/mypage/scrap"? "Scrap": "Like"}</Title>
             <Container>{
                 feedList && feedList.map((data, index)=>(
-                    <Img key={index} src={data.feed.image} onClick={()=>{navigate("/feed/"+data.feed.id)}}/>
+                    <Img key={index} src={data.feed.imageData? getServerImgFile(data.feed.imageData): data.feed.image} onClick={()=>{navigate("/feed/"+data.feed.id)}}/>
                 ))
             }</Container>
         </ScrollableContent>

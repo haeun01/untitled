@@ -12,6 +12,7 @@ import bookmark from "./../img/bookmarkFeed.png";
 import blackbookmark from "./../img/bookmarkFeedCheck.png";
 import closeBtn from "./../img/x.png";
 import defaltUserImg from "./../img/defaltUserImg.png";
+import { FeedTab } from "./FeedTab";
 
 const SearchBox = styled.div`
     display: flex;
@@ -109,6 +110,7 @@ export function FeedHome(){
             </SearchBox>
             <UserBar userList={userSearchList.length > 0 ? userSearchList : userList} sessionUser={userSearchList.length > 0 ? null : sessionUser} />
             <FeedBar feedList={feedSearchList.length > 0 ? feedSearchList : feedList} sessionUser={feedSearchList.length > 0 ? null : sessionUser} />
+            <FeedTab/>
         </div>:null}
     </>
 }
@@ -148,9 +150,12 @@ const UserBarFlex = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 `
 function UserContainer({ user }){
-    return <UserBarFlex>
+    const navigate = useNavigate();
+
+    return <UserBarFlex onClick={()=>{navigate("/feed/user/"+user.userId)}}>
         <UserImg src={user.data? getServerImgFile(user.data): user.profileImg}/>
         <div>{user.userId}</div>
     </UserBarFlex>
