@@ -14,7 +14,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: black;
-  padding: 30px;
+  padding: 55px;
   box-sizing: border-box;
 `;
 
@@ -93,7 +93,7 @@ export function LectureDetail() {
         setChatMessages(response.data.chatMessages || []);
       })
       .catch(error => {
-        console.error("Error fetching lecture data:", error);
+        console.error("Error:", error);
       });
 
     // WebSocket 연결 설정
@@ -128,12 +128,12 @@ export function LectureDetail() {
   return (
     <Container>
       <TitleBar>
-        <VideoTitle>{lectureData && lectureData ? lectureData.lecture_name : 'Loading...'} 👀</VideoTitle>
+        <VideoTitle>{lectureData ? lectureData.lecture_name : 'Loading...'}</VideoTitle>
       </TitleBar>
       <ContentArea>
         <VideoPlayer>
           {lectureData ? (
-            <video width="100%" height="100%" controls>
+            <video width="100%" height="100%" controls poster={lectureData.image}>
               <source src={lectureData.url} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
