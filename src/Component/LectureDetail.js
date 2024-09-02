@@ -128,7 +128,7 @@ export function LectureDetail() {
   return (
     <Container>
       <TitleBar>
-        <VideoTitle>{lectureData ? lectureData.lecture_name : 'Loading...'}</VideoTitle>
+        <VideoTitle>{lectureData ? lectureData.lectureName : 'Loading...'}</VideoTitle>
       </TitleBar>
       <ContentArea>
         <VideoPlayer>
