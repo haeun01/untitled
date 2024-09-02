@@ -83,9 +83,19 @@ export function LectureDetail() {
   const [lectureData, setLectureData] = useState(null); // 강의 데이터를 저장할 상태
   const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지를 저장할 상태
   const [message, setMessage] = useState(""); // 입력한 메시지 상태
+  const [user, setUser] = useState(null); // 현재 로그인한 사용자 정보
   const stompClient = useRef(null);
 
   useEffect(() => {
+    // 현재 로그인한 사용자 정보 가져오기
+    axios.get("/api/current")
+      .then(response => {
+        setUser(response.data); // 사용자 정보 설정
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+      });
+
     // 강의 데이터 가져오기
     axios.get(`/api/lecture/${id}`)
       .then(response => {
@@ -93,35 +103,46 @@ export function LectureDetail() {
         setChatMessages(response.data.chatMessages || []);
       })
       .catch(error => {
-        console.error("Error:", error);
+        console.error("Error fetching lecture data:", error);
       });
 
     // WebSocket 연결 설정
     const socket = new SockJS('http://localhost:8080/ws');
     stompClient.current = Stomp.over(socket);
+    
+    // 디버깅을 위한 STOMP 클라이언트 로깅 활성화
+    stompClient.current.debug = (str) => {
+      console.log(str);
+    };
+
+    // STOMP 연결 설정
     stompClient.current.connect({}, () => {
-      stompClient.current.subscribe(`/topic/public`, (messageOutput) => {
-        const receivedMessage = JSON.parse(messageOutput.body);
-        setChatMessages(prevMessages => [...prevMessages, receivedMessage.content]);
-      });
+      console.log("Connected to WebSocket server");
+      // 구독을 제거해도, 서버와의 연결은 유지됨
+    }, (error) => {
+      console.error("STOMP connection error:", error);
     });
 
     return () => {
       if (stompClient.current) {
-        stompClient.current.disconnect();
+        stompClient.current.disconnect(() => {
+          console.log("Disconnected from WebSocket server");
+        });
       }
     };
   }, [id]);
 
   const sendMessage = () => {
-    if (stompClient.current && message.trim() !== "") {
+    if (stompClient.current && stompClient.current.connected && message.trim() !== "" && user) {
       const chatMessage = {
-        sender: "User", // 임의의 사용자 이름 사용 또는 로그인 사용자 이름 사용
+        senderId: user.userId, // 로그인된 사용자의 ID
         content: message,
-        type: "CHAT"
       };
       stompClient.current.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
-      setMessage(""); // 입력란 초기화
+      setMessage(""); 
+      setChatMessages(prevMessages => [...prevMessages, chatMessage]); // 메시지 바로 추가
+    } else {
+      console.error("STOMP client is not connected or message is empty.");
     }
   };
 
@@ -143,11 +164,11 @@ export function LectureDetail() {
         </VideoPlayer>
         <ChatSection>
           {chatMessages.length > 0 ? (
-            chatMessages.map((message, index) => (
-              <p key={index}>{message}</p>
+            chatMessages.map((msg, index) => (
+              <p key={index}><strong>{msg.senderName}:</strong> {msg.content}</p>
             ))
           ) : (
-            <p>Loading Chat...</p>
+            <p>No chat messages</p>
           )}
           <ChatInput
             type="text"
