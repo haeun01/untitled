@@ -188,6 +188,8 @@ export function MyPage() {
           )}
         </MypageLeft>
         <MypageRight>
+        <span></span>
+        <span></span>
           <Outlet />
         </MypageRight>
       </Flex>
