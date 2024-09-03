@@ -1,0 +1,18 @@
+"user_id","birthday","coin","created_at","email","password","profile_img","profile_text","user_name","user_authority"
+admin1,1990-01-01,0,2024-06-17 15:24:51.207,ham@gmail.com,$2a$10$8DWjfxQTOM4m9pELJA7a0Oa.hfX4AKygFG4BKi2umlayTfVm8H066,"","",admin,ROLE_ADMIN
+bill,1991-10-31,0,2024-06-26 12:03:39.844,bill@google.com,$2a$10$o6w0sGxV5kKWTjNK0RMI.e0GzMibEMDPyWhsHwV9pBvPniUI/4J9O,"","",bill,ROLE_USER
+cake,2003-03-03,1,2024-06-17 15:26:42.717,cake@gmail.com,$2a$10$.LwoYY26.g3nZuA/EloeD.wa2lkbg2ZDe6Cu5XeZjEyLlAxomoknS,https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554_1280.jpg,"",cake,ROLE_USER
+doll,1995-11-03,0,2024-06-26 12:13:57.514,doll@paran.com,$2a$10$gjiszW8YmH8Yn8K85v65kOWItNnyhwKTAwNj5e5aAHgbove8yJnPS,"","",doll,ROLE_USER
+elin,1992-04-21,0,2024-06-26 12:00:06.478,elin@email.com,$2a$10$q/Vm2Nk7z7zxO7sux0W4Pe37ITNJTcdWfHE5YbkeWUV3kk.SR1N26,"","",elin,ROLE_USER
+ham,1990-01-01,50,2024-06-17 15:20:59.242,ham@gmail.com,$2a$10$FfZshWwgkLvx8FAwx.VsI.sWeZX.YuBrOLkjMKmvNWJFMExdkf0vm,"","",ham,ROLE_USER
+jake,1994-05-16,0,2024-06-26 16:30:24.119,jake@gmail.com,$2a$10$nvwVK3HDbJAkwF3.xQVJkeWunbhY.FuoM11FQ6bcYQ3htxZ7Zy9Kq,"","",jake,ROLE_USER
+jane,1992-01-04,0,2024-06-26 12:16:40.458,jane@gmail.com,$2a$10$9h/EUdtwYQavz.mPXp2YEuueD2104G.vdFAMANj2ecc.3voYQ3f9K,"","",jane,ROLE_USER
+jin,1996-06-26,0,2024-06-26 12:18:33.937,jin@gmail.com,$2a$10$XJfLVjNIGXg987LUDCvxJeam2IlwkYgP0bvqR9U8VZvjPhIXWnrAy,"","",jin,ROLE_USER
+kevin,2002-03-24,0,2024-06-26 11:52:42.969,kevin@email.com,$2a$10$mQtZto.OXMrjSCrf2h.rbuHjRYbd/1p0zJvmUeOcbFbdP3g7u2yGC,"","",kevin,ROLE_USER
+kyo,2002-12-01,0,2024-06-26 12:14:52.238,kyo@naver.com,$2a$10$YJh7FKhdl6S5zSM3xiaQV.A3VgYnhwHSNCj/wWfTJxbh30MfYtVIa,"","",kyo,ROLE_USER
+noel,1999-07-13,0,2024-06-26 12:01:16.892,noel@email.com,$2a$10$ag/E1L9m4ip..d4E1kXUe.F3fQekTS7bBkB070XCkqPEofNVdxiUO,https://cdn.pixabay.com/video/2022/10/16/135160-761273559_tiny.mp4,안녕하세요 noel입니다. 현재 헬스트레이너로 일하고 있고 회원들 자세 봐주고 있습니다.,noel,ROLE_USER
+rose,1995-05-05,30,2024-06-17 15:25:57.683,rose@gmail.com,$2a$10$JibM3bfEmSwN6//qr2QQ8ehNuoIx9brKTa2z0BwSExKWsGGOqpy/i,https://cdn.pixabay.com/photo/2024/03/24/17/10/background-8653526_640.jpg,다이어트에 성공하고 싶어요.,rose,ROLE_USER
+sam,1988-08-07,0,2024-06-26 12:23:50.092,sam@gmail.com,$2a$10$ZfBMD.degxpPE9tOgz/zEulgn31ru2noQu6Gzu7YrVz4Wc0fgN/ty,"","",sam,ROLE_USER
+steve,2001-01-01,0,2024-06-17 15:18:52.811,steve@gmail.com,$2a$10$0LWZO1A3UtGUWKmaaU.FBOj24x/h7XqOP3cXMMWhO.CFsm9v.RQZ6,https://cdn.pixabay.com/photo/2024/03/30/19/29/ai-generated-8665327_640.png,"안녕하세요. 유산소, 근력운동 위주의 영상을 주로 업로드합니다.",steve,ROLE_USER
+susan,1997-09-05,0,2024-06-26 12:02:13.351,susan@email.com,$2a$10$7tL382ON6BqBy9FoKwD/5.WsifgUyQs5Rtyxdls/B8lkKReSg8Eka,"","",susan,ROLE_USER
+tom,2002-02-02,0,2024-06-17 15:20:01.417,tom@gmail.com,$2a$10$eHvHGSr1VN4Db1l2l/NISO4bCwDLTuAalIm9J5ZQuZHJy4zZIQSBi,https://cdn.pixabay.com/photo/2017/08/02/20/24/woman-2573216_1280.jpg,"안녕하세요. 요가, 필라테스, 자세교정 관련한 영상을 주로 촬영합니다.",tom,ROLE_USER
