@@ -343,7 +343,9 @@ function UserBarContent({user, func}){
     
     return <>
         <TooltipFlex>
-            <ProfileImage src={user.data? getServerImgFile(user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+user.userId)}}/>
+            <div style={{width:"30px", height:"30px"}}>
+                <ProfileImage src={user.data? getServerImgFile(user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+user.userId)}}/>
+            </div>
             <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", width: "100%"}}>
                 <div>
                     <div>{user.userId}</div>

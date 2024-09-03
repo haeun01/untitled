@@ -344,7 +344,9 @@ export function Feed() {
                 <Contents>
                     <Flex style={{padding: "20px 30px", justifyContent:"space-between"}}>
                         <Flex>
-                            <ProfileImg src={feed.user.data? getServerImgFile(feed.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+feed.user.userId)}}/>
+                            <div style={{width:"50px", height:"50px"}}>
+                                <ProfileImg src={feed.user.data? getServerImgFile(feed.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+feed.user.userId)}}/>
+                            </div>
                             <div>
                                 <Flex>
                                     <div style={{fontSize: "20px", fontWeight: "bold"}}>{feed.user.userId}</div>
@@ -542,7 +544,9 @@ export function FeedCommentBar({comment, func}){
     return <>
         {commentDelete? <div/>: <FeedCommentContainer>
             <Flex style={{alignItems:"start"}}>
-                <Img src={comment.user.data? getServerImgFile(comment.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+comment.user.userId)}}/>
+                <div style={{width:"50px", height:"50px"}}>
+                    <Img src={comment.user.data? getServerImgFile(comment.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+comment.user.userId)}}/>
+                </div>
                 <div style={{width: "100%"}}>
                     <Flex style={{gap: "5px", marginBottom: "5px"}}>
                         <div>{comment.user.userId}</div>

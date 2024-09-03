@@ -213,7 +213,9 @@ export function FeedUser(){
     return <Container>
         {user? <div><div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
             <Flex style={{marginBottom:"20px", gap:"10%", width:"100%"}}>
-                <ProfileImg src={user.data? getServerImgFile(user.data): defaltUserImg}/>
+                <div style={{width:"200px", height:"200px"}}>
+                    <ProfileImg src={user.data? getServerImgFile(user.data): defaltUserImg}/>
+                </div>
                 {follower && following && feedList? <FlexC style={{width:"100%"}}>
                     <Flex style={{gap: "50px", fontSize: "20px", justifyContent:"space-between"}}>
                         <FlexC style={{gap: "10px", alignItems:"center"}}>
