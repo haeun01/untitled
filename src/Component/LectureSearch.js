@@ -55,46 +55,100 @@ const SearchButton = styled.button`
 const LectureList = styled.div`
   width: 100%;
   max-width: 1200px;
-  margin-bottom: 60px;
+  display: flex;
+  overflow-x: auto;
+  padding: 20px 0;
+  gap: 20px;
+  margin: 0 auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  &::-webkit-scrollbar {
+    height: 8px;
+    border-radius: 10px;
+    border: 1px solid #fff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #561689;
+    border-radius: 10px;
+    border: 1px solid #fff;
+  }
 `;
 
 // 강의 항목 스타일
 const LectureItem = styled.div`
-  background-color: #fff;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-image: url(${(props) => props.imageUrl});
   color: black;
-  padding: 30px;
-  margin-bottom: 20px;
-  border-radius: 15px;
-  font-size: 25px;
+  padding: 20px;
+  font-size: 18px;
   cursor: pointer;
+  width: 400px;
+  height: 600px;
+  box-sizing: border-box;
   transition: transform 0.2s ease, background-color 0.2s ease;
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  margin-right: 20px;
+  overflow: hidden;
+
   &:hover {
-    background-color: #ccc;
-    transform: scale(1.05);
+    transform: scale(1.05); /* 살짝 확대 */
+    z-index: 1;
+  }
+
+  &:hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경 어두워짐 */
+    z-index: 0;
   }
 `;
 
 const LectureTitle = styled.span`
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  z-index: 1;
+  color: white; /* 텍스트가 배경 위에 잘 보이도록 흰색으로 설정 */
 `;
 
 const InfoText = styled.div`
-  font-size: 18px;
-  color: black;
-  margin-top: 5px;
+  font-size: 16px;
+  color: white;
+  margin-top: 10px;
+  position: relative;
+  z-index: 1;
+  transform: translateX(-100%); /* 처음엔 화면 밖에 위치 */
+  transition: transform 0.5s ease, opacity 0.5s ease; /* 슬라이드 애니메이션 */
+  opacity: 0; /* 처음엔 보이지 않도록 설정 */
+
+  ${LectureItem}:hover & {
+    transform: translateX(0); /* 마우스 오버 시 왼쪽에서 오른쪽으로 슬라이드 */
+    opacity: 1; /* 마우스 오버 시 텍스트 보이도록 설정 */
+  }
 `;
 
 const Logo = styled.div`
   width: 100px;
   height: 100px;
-  margin-bottom: 100px;
+  margin: 50px 0;
 `;
 
 export function LectureSearch() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [lectures, setLectures] = useState([]);
-  const searchRef = useRef(null); // 검색창으로 스크롤하기 위한 ref
+  const searchRef = useRef(null);
 
   // 강의 목록 불러오는 함수
   const fetchLectures = async () => {
@@ -114,9 +168,12 @@ export function LectureSearch() {
     }
 
     try {
-      const response = await axios.get("http://localhost:8080/api/searchLecture", {
-        params: { query: searchQuery }
-      });
+      const response = await axios.get(
+        "http://localhost:8080/api/searchLecture",
+        {
+          params: { query: searchQuery },
+        }
+      );
 
       if (response.data.length > 0) {
         setLectures(response.data);
@@ -127,7 +184,7 @@ export function LectureSearch() {
     } catch (error) {
       console.error("검색 중 오류 발생: ", error);
       alert("검색 중 오류가 발생했습니다.");
-      fetchLectures(); // 기본 강의 목록 불러오기
+      fetchLectures();
     }
   };
 
@@ -171,7 +228,11 @@ export function LectureSearch() {
       </SearchContainer>
       <LectureList>
         {lectures.map((lecture) => (
-          <LectureItem key={lecture.id} onClick={() => handleLectureClick(lecture.id)}>
+          <LectureItem
+            key={lecture.id}
+            imageUrl={lecture.imageUrl} /* 데이터베이스에서 가져온 이미지 URL */
+            onClick={() => handleLectureClick(lecture.id)}
+          >
             <LectureTitle>{lecture.lectureName}</LectureTitle>
             <InfoText>{lecture.description}</InfoText>
           </LectureItem>

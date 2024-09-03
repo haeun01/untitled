@@ -33,7 +33,7 @@ const MypageRight = styled.div`
     width: 100%;
     height: 2px;
     background: linear-gradient(90deg, transparent, #fff);
-    animation: animate1 2s linear infinite;
+    animation: animate1 2.5s linear infinite;
   }
 
   /* 오른쪽 라인 */
@@ -43,7 +43,7 @@ const MypageRight = styled.div`
     width: 2px;
     height: 100%;
     background: linear-gradient(180deg, transparent, #fff);
-    animation: animate2 2s linear infinite;
+    animation: animate2 2.5s linear infinite;
     animation-delay: 0.5s;
   }
 
@@ -54,7 +54,7 @@ const MypageRight = styled.div`
     width: 100%;
     height: 2px;
     background: linear-gradient(270deg, transparent, #fff);
-    animation: animate3 2s linear infinite;
+    animation: animate3 2.5s linear infinite;
     animation-delay: 1s;
   }
 
@@ -65,7 +65,7 @@ const MypageRight = styled.div`
     width: 2px;
     height: 100%;
     background: linear-gradient(360deg, transparent, #fff);
-    animation: animate4 2s linear infinite;
+    animation: animate4 2.5s linear infinite;
     animation-delay: 1.5s;
   }
 
