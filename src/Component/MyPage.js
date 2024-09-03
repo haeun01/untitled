@@ -8,27 +8,100 @@ const MypageLeft = styled.div`
 `;
 
 const MypageRight = styled.div`
-  position: relative;
+   position: relative;
   width: 72%;
   height: 800px;
   margin-right: 50px;
   background-color: black;
   overflow: hidden;
-  border: 2px solid transparent;
-  animation: reflectiveBorder 4s infinite;
 
-  @keyframes reflectiveBorder {
+  /* 네 변에 애니메이션 효과 추가 */
+  &::before,
+  &::after,
+  & span:nth-of-type(1),
+  & span:nth-of-type(2) {
+    content: '';
+    position: absolute;
+    background: #fff;
+    pointer-events: none;
+  }
+
+  /* 위쪽 라인 */
+  &::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #fff);
+    animation: animate1 2s linear infinite;
+  }
+
+  /* 오른쪽 라인 */
+  &::after {
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #fff);
+    animation: animate2 2s linear infinite;
+    animation-delay: 0.5s;
+  }
+
+  /* 아래쪽 라인 */
+  & span:nth-of-type(1) {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #fff);
+    animation: animate3 2s linear infinite;
+    animation-delay: 1s;
+  }
+
+  /* 왼쪽 라인 */
+  & span:nth-of-type(2) {
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #fff);
+    animation: animate4 2s linear infinite;
+    animation-delay: 1.5s;
+  }
+
+  @keyframes animate1 {
     0% {
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1), inset 0 0 5px rgba(255, 255, 255, 0.3);
+      left: -100%;
     }
-    50% {
-      border-color: rgba(255, 255, 255, 1);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.6);
+    50%, 100% {
+      left: 100%;
     }
-    100% {
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1), inset 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+
+  @keyframes animate2 {
+    0% {
+      top: -100%;
+    }
+    50%, 100% {
+      top: 100%;
+    }
+  }
+
+  @keyframes animate3 {
+    0% {
+      right: -100%;
+    }
+    50%, 100% {
+      right: 100%;
+    }
+  }
+
+  @keyframes animate4 {
+    0% {
+      bottom: -100%;
+    }
+    50%, 100% {
+      bottom: 100%;
     }
   }
 `;
