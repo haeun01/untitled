@@ -5,7 +5,7 @@ import axios from "axios";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-// 스타일 컴포넌트 (기존 코드 유지)
+// 스타일 컴포넌트
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -86,42 +86,64 @@ export function LectureDetail() {
   const [user, setUser] = useState(null); // 현재 로그인한 사용자 정보
   const stompClient = useRef(null);
 
+  //이모티콘의 위치를 상태로 관리
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    // 마우스 이동 이벤트 리스너 등록
+    const handleMouseMove = (e) => {
+      setCursorPosition({ x: e.pageX + 4, y: e.pageY + 4 });
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   useEffect(() => {
     // 현재 로그인한 사용자 정보 가져오기
-    axios.get("/api/current")
-      .then(response => {
+    axios
+      .get("/api/current")
+      .then((response) => {
         setUser(response.data); // 사용자 정보 설정
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching user data:", error);
       });
 
     // 강의 데이터 가져오기
-    axios.get(`/api/lecture/${id}`)
-      .then(response => {
+    axios
+      .get(`/api/lecture/${id}`)
+      .then((response) => {
         setLectureData(response.data);
         setChatMessages(response.data.chatMessages || []);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching lecture data:", error);
       });
 
     // WebSocket 연결 설정
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS("http://localhost:8080/ws");
     stompClient.current = Stomp.over(socket);
-    
+
     // 디버깅을 위한 STOMP 클라이언트 로깅 활성화
     stompClient.current.debug = (str) => {
       console.log(str);
     };
 
     // STOMP 연결 설정
-    stompClient.current.connect({}, () => {
-      console.log("Connected to WebSocket server");
-      // 구독을 제거해도, 서버와의 연결은 유지됨
-    }, (error) => {
-      console.error("STOMP connection error:", error);
-    });
+    stompClient.current.connect(
+      {},
+      () => {
+        console.log("Connected to WebSocket server");
+        // 구독을 제거해도, 서버와의 연결은 유지됨
+      },
+      (error) => {
+        console.error("STOMP connection error:", error);
+      }
+    );
 
     return () => {
       if (stompClient.current) {
@@ -133,14 +155,23 @@ export function LectureDetail() {
   }, [id]);
 
   const sendMessage = () => {
-    if (stompClient.current && stompClient.current.connected && message.trim() !== "" && user) {
+    if (
+      stompClient.current &&
+      stompClient.current.connected &&
+      message.trim() !== "" &&
+      user
+    ) {
       const chatMessage = {
         senderId: user.userId, // 로그인된 사용자의 ID
         content: message,
       };
-      stompClient.current.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
-      setMessage(""); 
-      setChatMessages(prevMessages => [...prevMessages, chatMessage]); // 메시지 바로 추가
+      stompClient.current.send(
+        "/app/chat.sendMessage",
+        {},
+        JSON.stringify(chatMessage)
+      );
+      setMessage("");
+      setChatMessages((prevMessages) => [...prevMessages, chatMessage]); // 메시지 바로 추가
     } else {
       console.error("STOMP client is not connected or message is empty.");
     }
@@ -149,12 +180,19 @@ export function LectureDetail() {
   return (
     <Container>
       <TitleBar>
-        <VideoTitle>{lectureData ? lectureData.lectureName : 'Loading...'}</VideoTitle>
+        <VideoTitle>
+          {lectureData ? lectureData.lectureName : "Loading..."}
+        </VideoTitle>
       </TitleBar>
       <ContentArea>
         <VideoPlayer>
           {lectureData ? (
-            <video width="100%" height="100%" controls poster={lectureData.image}>
+            <video
+              width="100%"
+              height="100%"
+              controls
+              poster={lectureData.image}
+            >
               <source src={lectureData.url} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
@@ -165,7 +203,9 @@ export function LectureDetail() {
         <ChatSection>
           {chatMessages.length > 0 ? (
             chatMessages.map((msg, index) => (
-              <p key={index}><strong>{msg.senderName}:</strong> {msg.content}</p>
+              <p key={index}>
+                <strong>{msg.senderName}:</strong> {msg.content}
+              </p>
             ))
           ) : (
             <p>No chat messages</p>
@@ -179,6 +219,18 @@ export function LectureDetail() {
           <ChatButton onClick={sendMessage}>Send</ChatButton>
         </ChatSection>
       </ContentArea>
+      <div
+        style={{
+          position: "absolute",
+          left: `${cursorPosition.x}px`,
+          top: `${cursorPosition.y}px`,
+          pointerEvents: "none",
+          zIndex: 1000,
+          fontSize: "24px",
+        }}
+      >
+        👀
+      </div>
     </Container>
   );
 }

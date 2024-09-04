@@ -13,6 +13,7 @@ const Container = styled.div`
   background-color: black;
   padding: 0;
   box-sizing: border-box;
+  cursor: none;
 `;
 
 // 검색바 컨테이너 스타일
@@ -64,15 +65,15 @@ const LectureList = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   &::-webkit-scrollbar {
-    height: 8px;
-    border-radius: 10px;
-    border: 1px solid #fff;
+    height: 6px;
+    border-radius: 50px;
+    // border: 1px solid #fff;
   }
 
   &::-webkit-scrollbar-thumb {
     background: #561689;
     border-radius: 10px;
-    border: 1px solid #fff;
+    // border: 1px solid #fff;
   }
 `;
 
@@ -149,6 +150,22 @@ export function LectureSearch() {
   const [searchQuery, setSearchQuery] = useState("");
   const [lectures, setLectures] = useState([]);
   const searchRef = useRef(null);
+
+  // 이모티콘의 위치를 상태로 관리
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    // 마우스 이동 이벤트 리스너 등록
+    const handleMouseMove = (e) => {
+      setCursorPosition({ x: e.pageX + 4, y: e.pageY + 4 });
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   // 강의 목록 불러오는 함수
   const fetchLectures = async () => {
@@ -248,6 +265,18 @@ export function LectureSearch() {
           />
         </a>
       </Logo>
+      <div
+        style={{
+          position: "absolute",
+          left: `${cursorPosition.x}px`,
+          top: `${cursorPosition.y}px`,
+          pointerEvents: "none",
+          zIndex: 1000,
+          fontSize: "24px",
+        }}
+      >
+        👀
+      </div>
     </Container>
   );
 }
