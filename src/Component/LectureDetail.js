@@ -142,7 +142,7 @@ export function LectureDetail() {
       });
 
     // WebSocket 연결 설정
-    const socket = new SockJS("http://localhost:8080/ws/chat");
+    const socket = new SockJS("http://localhost:8080/websocket/chat");
     stompClient.current = Stomp.over(socket);
 
     stompClient.current.heartbeat.outgoing = 20000; // 20초마다 서버에 heartbeat 보냄
