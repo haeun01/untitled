@@ -55,7 +55,7 @@ const VideoPlayer = styled.div`
 const ChatSection = styled.div`
   width: 400px;
   height: 600px;
-  background-color: white;
+  background-color: #333;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -68,8 +68,9 @@ const ChatInput = styled.input`
   padding-left: 10px;
   margin-top: 10px;
   margin-right: 5px;
+  background-color: #666;
   box-sizing: border-box;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   color: black;
 `;
 
@@ -141,17 +142,16 @@ export function LectureDetail() {
         console.error("Error:", error);
       });
 
+    // 로그인한 사용자 정보에서 토큰 가져오기
+    const token = localStorage.getItem("token");
+
     // WebSocket 연결 설정
-    const socket = new SockJS("http://localhost:8080/websocket/chat");
+    const socket = new SockJS("http://localhost:8080/ws");
     stompClient.current = Stomp.over(socket);
 
-    stompClient.current.heartbeat.outgoing = 20000; // 20초마다 서버에 heartbeat 보냄
-    stompClient.current.heartbeat.incoming = 20000; // 20초마다 서버에 heartbeat 받음
-
-    const token = localStorage.getItem("token");
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    // STOMP 연결 설정
+    // STOMP 클라이언트 연결
     stompClient.current.connect(
       headers,
       (frame) => {
@@ -169,18 +169,19 @@ export function LectureDetail() {
         });
       }
     };
-  }, [id]);
+  }, []);
 
   const sendMessage = () => {
     if (!message.trim()) {
       console.error("Cannot send an empty message");
-      return; // 빈 메시지를 보내지 않음
+      return;
     }
 
     if (stompClient.current && stompClient.current.connected) {
       const chatMessage = {
         content: message,
         senderId: user.id,
+        senderName: user.username,
       };
 
       stompClient.current.send(
@@ -188,7 +189,7 @@ export function LectureDetail() {
         {},
         JSON.stringify(chatMessage)
       );
-      setMessage(""); // 메시지 전송 후 입력 필드를 비우기
+      setMessage(""); // 메시지 전송 후 입력 필드 비우기
     } else {
       console.error("STOMP client is not connected");
     }
