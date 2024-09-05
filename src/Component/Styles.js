@@ -5,6 +5,34 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getServerImgFile } from "./File";
 import defaltUserImg from "./../img/defaltUserImg.png";
+import logo from "./../images/logo/logo_white.png";
+
+const Logo = styled.div`
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  animation: rotate_image 10s linear infinite;
+  transform-origin: 50% 50%;
+  @keyframes rotate_image {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+export function Loading(){
+    return <>
+        <Logo>
+            <img
+              src={logo}
+              width="200"
+              height="200"
+              alt="untitled_logo"
+            />
+        </Logo>
+        <div style={{textAlign:"center", fontWeight:"bold", fontSize:"30px", margin:"20px"}}>로딩중입니다.</div>
+    </>
+}
 
 export const Title = styled.div`
     font-size: 50px;
@@ -315,6 +343,14 @@ function UserBarContent({user, func}){
     }
 
     async function FollowClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(sessionUserFollow){
                 const response = await axios.delete("http://localhost:8080/api/userFollow", {

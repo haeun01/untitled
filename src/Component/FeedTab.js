@@ -7,6 +7,7 @@ import write from "./../img/write_feedTab.png";
 import account from "./../img/account_feedTab.png";
 import bookmark from "./../img/bookmark_feedTab.png";
 import favorite from "./../img/favorite_feedTab.png";
+import { useEffect } from "react";
 
 const TabContainer = styled.div`
     display: flex;
@@ -47,7 +48,7 @@ export function FeedTab(){
     };
 
     return <>
-        <TabContainer>
+        {sessionUser? sessionUser!="anonymousUser"? <TabContainer>
             <Tab onClick={()=>{navigate("/feed/home")}}>
                 <Img src={home}/>
                 <div>피드홈</div>
@@ -67,6 +68,27 @@ export function FeedTab(){
             <Tab onClick={()=>{navigate("/mypage/scrap")}}>
                 <Img src={bookmark}/>
                 <div>스크랩</div>
+            </Tab>
+            <Tab onClick={scrollToTop}>
+                <Img src={up}/>
+                <div>위로가기</div>
+            </Tab>
+        </TabContainer>: <LogoutFeedTab/>: <LogoutFeedTab/>}
+    </>
+}
+
+function LogoutFeedTab(){
+    const navigate = useNavigate();
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    return <>
+        <TabContainer>
+            <Tab onClick={()=>{navigate("/feed/home")}}>
+                <Img src={home}/>
+                <div>피드홈</div>
             </Tab>
             <Tab onClick={scrollToTop}>
                 <Img src={up}/>

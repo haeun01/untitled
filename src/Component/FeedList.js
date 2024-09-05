@@ -15,6 +15,8 @@ const Container = styled.div`
 `
 const Img = styled.img`
     width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     cursor: pointer;
     &:hover {
         box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);

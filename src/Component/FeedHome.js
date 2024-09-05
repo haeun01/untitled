@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FollowerTooltip, FollowingTooltip, LikeTooltip, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
+import { FollowerTooltip, FollowingTooltip, LikeTooltip, Loading, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -111,7 +111,7 @@ export function FeedHome(){
             <UserBar userList={userSearchList.length > 0 ? userSearchList : userList} sessionUser={userSearchList.length > 0 ? null : sessionUser} />
             <FeedBar feedList={feedSearchList.length > 0 ? feedSearchList : feedList} sessionUser={feedSearchList.length > 0 ? null : sessionUser} />
             <FeedTab/>
-        </div>:null}
+        </div>:<Loading/>}
     </>
 }
 
@@ -249,7 +249,7 @@ export function FeedContainer({feed}) {
     }, [sessionUser]);
 
     useEffect(() => {
-        if(feed&&sessionUser){
+        if(feed){
             GetFeedLikeList()
         }
     }, [like]);
@@ -328,6 +328,14 @@ export function FeedContainer({feed}) {
     }
 
     async function ScrapClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(scrap){
                 const response = await axios.delete("http://localhost:8080/api/feedScrap", {
@@ -354,6 +362,14 @@ export function FeedContainer({feed}) {
     }
 
     async function LikeClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(like){
                 const response = await axios.delete("http://localhost:8080/api/feedLike", {
@@ -380,6 +396,14 @@ export function FeedContainer({feed}) {
     }
 
     async function FollowClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(sessionUserFollow){
                 const response = await axios.delete("http://localhost:8080/api/userFollow", {
