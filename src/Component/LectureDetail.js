@@ -59,23 +59,40 @@ const ChatSection = styled.div`
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
+  position: relative;
 `;
 
 const ChatInput = styled.input`
-  width: 100%;
-  padding: 10px;
+  flex: 1;
+  height: 30px;
+  padding-left: 10px;
   margin-top: 10px;
+  margin-right: 5px;
   box-sizing: border-box;
+  border: 1px solid black;
+  color: black;
 `;
 
 const ChatButton = styled.button`
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  background-color: #007bff;
+  width: 80px;
+  height: 30px;
+  margin-top: 10px;
+  background-color: #561689;
   color: white;
   border: none;
   cursor: pointer;
+`;
+
+const ChatControls = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 export function LectureDetail() {
@@ -110,7 +127,7 @@ export function LectureDetail() {
         setUser(response.data); // 사용자 정보 설정
       })
       .catch((error) => {
-        console.error("Error fetching user data:", error);
+        console.error("Error:", error);
       });
 
     // 강의 데이터 가져오기
@@ -121,24 +138,24 @@ export function LectureDetail() {
         setChatMessages(response.data.chatMessages || []);
       })
       .catch((error) => {
-        console.error("Error fetching lecture data:", error);
+        console.error("Error:", error);
       });
 
     // WebSocket 연결 설정
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS("http://localhost:8080/ws/chat");
     stompClient.current = Stomp.over(socket);
 
-    // 디버깅을 위한 STOMP 클라이언트 로깅 활성화
-    stompClient.current.debug = (str) => {
-      console.log(str);
-    };
+    stompClient.current.heartbeat.outgoing = 20000; // 20초마다 서버에 heartbeat 보냄
+    stompClient.current.heartbeat.incoming = 20000; // 20초마다 서버에 heartbeat 받음
+
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     // STOMP 연결 설정
     stompClient.current.connect(
-      {},
-      () => {
-        console.log("Connected to WebSocket server");
-        // 구독을 제거해도, 서버와의 연결은 유지됨
+      headers,
+      (frame) => {
+        console.log("Connected: " + frame);
       },
       (error) => {
         console.error("STOMP connection error:", error);
@@ -155,25 +172,25 @@ export function LectureDetail() {
   }, [id]);
 
   const sendMessage = () => {
-    if (
-      stompClient.current &&
-      stompClient.current.connected &&
-      message.trim() !== "" &&
-      user
-    ) {
+    if (!message.trim()) {
+      console.error("Cannot send an empty message");
+      return; // 빈 메시지를 보내지 않음
+    }
+
+    if (stompClient.current && stompClient.current.connected) {
       const chatMessage = {
-        senderId: user.userId, // 로그인된 사용자의 ID
         content: message,
+        senderId: user.id,
       };
+
       stompClient.current.send(
         "/app/chat.sendMessage",
         {},
         JSON.stringify(chatMessage)
       );
-      setMessage("");
-      setChatMessages((prevMessages) => [...prevMessages, chatMessage]); // 메시지 바로 추가
+      setMessage(""); // 메시지 전송 후 입력 필드를 비우기
     } else {
-      console.error("STOMP client is not connected or message is empty.");
+      console.error("STOMP client is not connected");
     }
   };
 
@@ -210,13 +227,15 @@ export function LectureDetail() {
           ) : (
             <p>No chat messages</p>
           )}
-          <ChatInput
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message here..."
-          />
-          <ChatButton onClick={sendMessage}>Send</ChatButton>
+          <ChatControls>
+            <ChatInput
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="message"
+            />
+            <ChatButton onClick={sendMessage}>Send</ChatButton>
+          </ChatControls>
         </ChatSection>
       </ContentArea>
       <div

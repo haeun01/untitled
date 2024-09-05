@@ -52,12 +52,37 @@ const SearchButton = styled.button`
   transition: background-color 0.3s;
 `;
 
+// 좌우 스크롤 버튼 스타일
+const ScrollButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+`;
+
+const LeftButton = styled(ScrollButton)`
+  left: 300px;
+`;
+
+const RightButton = styled(ScrollButton)`
+  right: 300px;
+`;
+
 // 강의 리스트 스타일
 const LectureList = styled.div`
   width: 100%;
   max-width: 1200px;
   display: flex;
-  overflow-x: auto;
+  overflow-x: hidden;
   padding: 20px 0;
   gap: 20px;
   margin: 0 auto;
@@ -97,7 +122,7 @@ const LectureItem = styled.div`
   overflow: hidden;
 
   &:hover {
-    transform: scale(1.05); /* 살짝 확대 */
+    transform: scale(1.05);
     z-index: 1;
   }
 
@@ -108,7 +133,7 @@ const LectureItem = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* 배경 어두워짐 */
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 0;
   }
 `;
@@ -120,7 +145,8 @@ const LectureTitle = styled.span`
   text-overflow: ellipsis;
   position: relative;
   z-index: 1;
-  color: white; /* 텍스트가 배경 위에 잘 보이도록 흰색으로 설정 */
+  color: white;
+  text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
 `;
 
 const InfoText = styled.div`
@@ -129,13 +155,13 @@ const InfoText = styled.div`
   margin-top: 10px;
   position: relative;
   z-index: 1;
-  transform: translateX(-100%); /* 처음엔 화면 밖에 위치 */
-  transition: transform 0.5s ease, opacity 0.5s ease; /* 슬라이드 애니메이션 */
-  opacity: 0; /* 처음엔 보이지 않도록 설정 */
+  transform: translateX(-100%);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
 
   ${LectureItem}:hover & {
-    transform: translateX(0); /* 마우스 오버 시 왼쪽에서 오른쪽으로 슬라이드 */
-    opacity: 1; /* 마우스 오버 시 텍스트 보이도록 설정 */
+    transform: translateX(0);
+    opacity: 1;
   }
 `;
 
@@ -150,6 +176,8 @@ export function LectureSearch() {
   const [searchQuery, setSearchQuery] = useState("");
   const [lectures, setLectures] = useState([]);
   const searchRef = useRef(null);
+  const lectureListRef = useRef(null);
+  const scrollAnimationRef = useRef(null);
 
   // 이모티콘의 위치를 상태로 관리
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -231,6 +259,39 @@ export function LectureSearch() {
     }
   };
 
+  const scroll = (direction) => {
+    if (lectureListRef.current) {
+      lectureListRef.current.scrollBy({ left: direction, behavior: "smooth" });
+    }
+  };
+
+  // 부드럽게 왼쪽으로 스크롤하는 함수
+  const startScrollLeft = () => {
+    scrollSmoothly(-5); // 왼쪽으로 부드럽게 이동 (값을 조정해서 속도를 제어)
+  };
+
+  // 부드럽게 오른쪽으로 스크롤하는 함수
+  const startScrollRight = () => {
+    scrollSmoothly(5); // 오른쪽으로 부드럽게 이동
+  };
+
+  // requestAnimationFrame을 사용해 부드럽게 스크롤
+  const scrollSmoothly = (step) => {
+    if (lectureListRef.current) {
+      lectureListRef.current.scrollBy({ left: step });
+      scrollAnimationRef.current = requestAnimationFrame(() =>
+        scrollSmoothly(step)
+      );
+    }
+  };
+
+  // 스크롤을 멈추는 함수
+  const stopScroll = () => {
+    if (scrollAnimationRef.current) {
+      cancelAnimationFrame(scrollAnimationRef.current);
+    }
+  };
+
   return (
     <Container>
       <SearchContainer ref={searchRef}>
@@ -243,11 +304,18 @@ export function LectureSearch() {
         />
         <SearchButton onClick={handleSearch}>🔗</SearchButton>
       </SearchContainer>
-      <LectureList>
+      <LeftButton
+        onMouseDown={startScrollLeft}
+        onMouseUp={stopScroll}
+        onMouseLeave={stopScroll}
+      >
+        ◁
+      </LeftButton>
+      <LectureList ref={lectureListRef}>
         {lectures.map((lecture) => (
           <LectureItem
             key={lecture.id}
-            imageUrl={lecture.imageUrl} /* 데이터베이스에서 가져온 이미지 URL */
+            imageUrl={lecture.thumbnail}
             onClick={() => handleLectureClick(lecture.id)}
           >
             <LectureTitle>{lecture.lectureName}</LectureTitle>
@@ -255,6 +323,13 @@ export function LectureSearch() {
           </LectureItem>
         ))}
       </LectureList>
+      <RightButton
+        onMouseDown={startScrollRight}
+        onMouseUp={stopScroll}
+        onMouseLeave={stopScroll}
+      >
+        ▷
+      </RightButton>
       <Logo>
         <a href="#" onClick={handleLogoClick}>
           <img

@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `lecture`;
 CREATE TABLE `lecture` (
   `id` int(11) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `lecture_name` varchar(255) DEFAULT NULL,
@@ -40,7 +41,7 @@ CREATE TABLE `lecture` (
 
 LOCK TABLES `lecture` WRITE;
 /*!40000 ALTER TABLE `lecture` DISABLE KEYS */;
-INSERT INTO `lecture` VALUES (1,'2024-06-17 16:28:00.000000','https://ifh.cc/g/Ft4a38.jpg','#네일 #달콤한무드 #🍫','UNTITLED Valentine Nail',3,'https://videos.pexels.com/video-files/3997787/3997787-uhd_2732_1440_25fps.mp4',4),(2,'2024-06-17 16:29:00.000000','https://ifh.cc/g/YTWdzN.jpg','#네일 #기초 #💅🏻','UNTITLED Nail Art 1',3,'https://videos.pexels.com/video-files/3997787/3997787-uhd_2732_1440_25fps.mp4',4),(3,'2024-06-17 16:44:00.000000','https://ifh.cc/g/VhXXnL.jpg','#네일 #심화 #💅🏻','UNTITLED Nail Art 2',3,'https://videos.pexels.com/video-files/3997787/3997787-uhd_2732_1440_25fps.mp4',4),(4,'2024-06-17 16:45:00.000000','','#눈화장 #기초 #👀','UNTITLED Eye Shadow 1',3,'https://videos.pexels.com/video-files/3181732/3181732-uhd_2560_1440_25fps.mp4',5),(5,'2024-06-18 16:45:00.000000','','#눈화장 #심화 #👀','UNTITLED Eye Shadow 2',3,'https://videos.pexels.com/video-files/3181732/3181732-uhd_2560_1440_25fps.mp4',5),(6,'2024-06-19 16:45:00.000000','','#쉐딩 # 기초 #🖌️','UNTITLED Shading 1',3,'https://videos.pexels.com/video-files/3181793/3181793-uhd_2560_1440_25fps.mp4',5),(7,'2024-06-20 16:45:00.000000','','#쉐딩 # 중급 #🖌️','UNTITLED Shading 2',3,'https://videos.pexels.com/video-files/3181793/3181793-uhd_2560_1440_25fps.mp4',5),(8,'2024-06-21 16:45:00.000000','','#쉐딩 #심화 #🖌️','UNTITLED Shading 3',3,'https://videos.pexels.com/video-files/3181793/3181793-uhd_2560_1440_25fps.mp4',5),(9,'2024-06-22 16:45:00.000000','https://ifh.cc/g/BH3NFh.jpg','#메이크업 #올인원 #🥰','UNTITLED Make Up Detail ',3,'https://videos.pexels.com/video-files/4620941/4620941-uhd_2732_1440_25fps.mp4',3);
+INSERT INTO `lecture` VALUES (1,'2024-06-17 16:28:00.000000','https://ifh.cc/g/NgjAgo.jpg','https://ifh.cc/g/Ft4a38.jpg','#네일 #달콤한무드 #🍫','UNTITLED Valentine Nail',3,'https://videos.pexels.com/video-files/3997787/3997787-uhd_2732_1440_25fps.mp4',4),(2,'2024-06-17 16:29:00.000000','https://ifh.cc/g/TzGqGT.jpg','https://ifh.cc/g/YTWdzN.jpg','#네일 #기초 #💅🏻','UNTITLED Nail Art 1',3,'https://videos.pexels.com/video-files/3997787/3997787-uhd_2732_1440_25fps.mp4',4),(3,'2024-06-17 16:44:00.000000','https://ifh.cc/g/g2vXyL.jpg','https://ifh.cc/g/VhXXnL.jpg','#네일 #심화 #💅🏻','UNTITLED Nail Art 2',3,'https://videos.pexels.com/video-files/3997787/3997787-uhd_2732_1440_25fps.mp4',4),(4,'2024-06-17 16:45:00.000000','','','#눈화장 #기초 #👀','UNTITLED Eye Shadow 1',3,'https://videos.pexels.com/video-files/3181732/3181732-uhd_2560_1440_25fps.mp4',5),(5,'2024-06-18 16:45:00.000000','','','#눈화장 #심화 #👀','UNTITLED Eye Shadow 2',3,'https://videos.pexels.com/video-files/3181732/3181732-uhd_2560_1440_25fps.mp4',5),(6,'2024-06-19 16:45:00.000000','','','#쉐딩 # 기초 #🖌️','UNTITLED Shading 1',3,'https://videos.pexels.com/video-files/3181793/3181793-uhd_2560_1440_25fps.mp4',5),(7,'2024-06-20 16:45:00.000000','','','#쉐딩 #중급 #🖌️','UNTITLED Shading 2',3,'https://videos.pexels.com/video-files/3181793/3181793-uhd_2560_1440_25fps.mp4',5),(8,'2024-06-21 16:45:00.000000','','','#쉐딩 #심화 #🖌️','UNTITLED Shading 3',3,'https://videos.pexels.com/video-files/3181793/3181793-uhd_2560_1440_25fps.mp4',5),(9,'2024-06-22 16:45:00.000000','https://ifh.cc/g/VAwJK1.png','https://ifh.cc/g/BH3NFh.jpg','#메이크업 #올인원 #🥰','UNTITLED Make Up Detail ',3,'https://videos.pexels.com/video-files/4620941/4620941-uhd_2732_1440_25fps.mp4',3);
 /*!40000 ALTER TABLE `lecture` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-03 17:26:34
+-- Dump completed on 2024-09-05 11:49:32
