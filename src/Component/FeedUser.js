@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { SessionCurrent } from "./SessionCurrent";
 import styled from "styled-components";
-import { FollowerTooltip, FollowingTooltip, ScrollableContent, Tooltip } from "./Styles";
+import { FollowerTooltip, FollowingTooltip, Loading, ScrollableContent, Tooltip } from "./Styles";
 import { getServerImgFile } from "./File";
 import defaltUserImg from "./../img/defaltUserImg.png";
-import logo from "./../images/logo/logo_white.png";
+import { FeedTab } from "./FeedTab";
 
 
 const Container = styled.div`
@@ -46,6 +46,8 @@ const FeedContainer = styled.div`
 
 const Img = styled.img`
     width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     cursor: pointer;
     &:hover {
         box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
@@ -67,19 +69,6 @@ const Btn = styled.div`
         color: white;
     }
 `
-
-const Logo = styled.div`
-  width: 200px;
-  height: 200px;
-  margin: auto;
-  animation: rotate_image 10s linear infinite;
-  transform-origin: 50% 50%;
-  @keyframes rotate_image {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;
 
 export function FeedUser(){
     const { id } = useParams();
@@ -175,6 +164,14 @@ export function FeedUser(){
     }
 
     async function FollowClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(sessionUserFollow){
                 const response = await axios.delete("http://localhost:8080/api/userFollow", {
@@ -249,15 +246,7 @@ export function FeedUser(){
                     <Img key={index} src={feed.imageData? getServerImgFile(feed.imageData): feed.image} onClick={()=>{navigate("/feed/"+feed.id)}}/>
                 ))}
             </FeedContainer>
-        </div>: <div><Logo>
-            <img
-              src={logo}
-              width="200"
-              height="200"
-              alt="untitled_logo"
-            />
-        </Logo>
-        <div style={{textAlign:"center", fontWeight:"bold", fontSize:"30px", margin:"20px"}}>로딩중입니다.</div></div>}
-        
+            <FeedTab/>
+        </div>: <Loading/>}
     </Container>
 }

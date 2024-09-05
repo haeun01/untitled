@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FollowerTooltip, FollowingTooltip, LikeTooltip, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
+import { FollowerTooltip, FollowingTooltip, LikeTooltip, Loading, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -140,10 +140,10 @@ export function Feed() {
     }, [feed, sessionUser]);
 
     useEffect(() => {
-        if(feed&&sessionUser){
+        if(feed){
             GetFeedLikeList()
         }
-    }, [like]);
+    }, [like, feed]);
 
     useEffect(() => {
         if(feed){
@@ -235,6 +235,14 @@ export function Feed() {
     }
 
     async function ScrapClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(scrap){
                 const response = await axios.delete("http://localhost:8080/api/feedScrap", {
@@ -261,6 +269,14 @@ export function Feed() {
     }
 
     async function LikeClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(like){
                 const response = await axios.delete("http://localhost:8080/api/feedLike", {
@@ -301,6 +317,14 @@ export function Feed() {
     let commentText;
 
     async function CommentPost(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             const response = await axios.post("http://localhost:8080/api/feedComment", {feed: {id:feed.id}, user: {userId: sessionUser}, text: commentText});
             const data = response.data;
@@ -312,6 +336,14 @@ export function Feed() {
     }
 
     async function FollowClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(sessionUserFollow){
                 const response = await axios.delete("http://localhost:8080/api/userFollow", {
@@ -395,7 +427,7 @@ export function Feed() {
                     </CommentBox>
                 </div>
             </Container>}
-        </div>: <div/>}
+        </div>: <Loading/>}
     </>
 }
 
@@ -490,6 +522,14 @@ export function FeedCommentBar({comment, func}){
     }
 
     async function LikeClick(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             if(like){
                 const response = await axios.delete("http://localhost:8080/api/feedCommentLike", {
@@ -518,6 +558,14 @@ export function FeedCommentBar({comment, func}){
     let commentText;
 
     async function CommentPost(){
+        if(sessionUser=="anonymousUser"){
+            const result = window.confirm("로그인이 필요한 서비스입니다. 로그인 창으로 이동할까요?");
+            if (result) {
+                window.location.href = '/login';
+            }
+            return;
+        }
+
         try{
             const response = await axios.post("http://localhost:8080/api/feedComment", {feed: {id: comment.feed.id}, user: {userId: sessionUser}, text: commentText, feedComment: {id: comment.id}});
             const data = response.data;

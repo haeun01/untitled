@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SessionCurrent } from "./SessionCurrent";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { Loading } from "./Styles";
 
 const MypageLeft = styled.div`
   margin: 30px 70px;
@@ -144,9 +145,16 @@ export function MyPage() {
     setShowFeedDetails((prev) => !prev);
   };
 
+  useEffect(() => {
+    if(sessionUser=="anonymousUser"){
+      alert("로그인이 필요한 서비스입니다.");
+      window.location.href = '/login';
+    }
+  }, [sessionUser]);
+
   return (
     <>
-      <Flex>
+      {sessionUser? sessionUser!="anonymousUser"? <Flex>
         <MypageLeft>
           <Flex style={{ alignItems: "center" }}>
             <Text $bold="true" size="100px">
@@ -192,7 +200,7 @@ export function MyPage() {
         <span></span>
           <Outlet />
         </MypageRight>
-      </Flex>
+      </Flex>:<Loading/>:<Loading/>}
     </>
   );
 }
