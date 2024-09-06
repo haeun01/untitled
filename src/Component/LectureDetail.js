@@ -151,24 +151,16 @@ export function LectureDetail() {
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    // STOMP 클라이언트 연결
-    stompClient.current.connect(
-      headers,
-      (frame) => {
-        console.log("Connected: " + frame);
-      },
-      (error) => {
-        console.error("STOMP connection error:", error);
-      }
-    );
+    stompClient.current.connect({}, (frame) => {
+      console.log("Connected: " + frame);
 
-    return () => {
-      if (stompClient.current) {
-        stompClient.current.disconnect(() => {
-          console.log("Disconnected from WebSocket server");
-        });
-      }
-    };
+      // /topic/public 경로를 구독 (서버에서 메시지를 브로드캐스트하는 경로)
+      stompClient.current.subscribe("/topic/public", (message) => {
+        // 메시지를 수신할 때 처리하는 로직
+        const chatMessage = JSON.parse(message.body);
+        setChatMessages((prevMessages) => [...prevMessages, chatMessage]);
+      });
+    });
   }, []);
 
   const sendMessage = () => {
