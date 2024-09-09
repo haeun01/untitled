@@ -62,7 +62,7 @@ const ScrollButton = styled.button`
   border: none;
   padding: 10px;
   cursor: pointer;
-  z-index: 10;
+  /* z-index: 10; */
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.8);

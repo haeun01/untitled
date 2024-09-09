@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
--- Host: localhost    Database: untitled
+-- Host: localhost    Database: UNTITLED
 -- ------------------------------------------------------
 -- Server version	11.4.2-MariaDB
 
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-05 11:49:32
+-- Dump completed on 2024-09-09 14:18:20

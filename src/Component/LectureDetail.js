@@ -172,8 +172,8 @@ export function LectureDetail() {
     if (stompClient.current && stompClient.current.connected) {
       const chatMessage = {
         content: message,
-        senderId: user.id,
-        senderName: user.username,
+        user: { userId: user.userId },
+        lecture: { id: id },
       };
 
       stompClient.current.send(
