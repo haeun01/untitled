@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FollowerTooltip, FollowingTooltip, LikeTooltip, Loading, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
+import { FollowerTooltip, FollowingTooltip, formatDate, LikeTooltip, Loading, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +40,9 @@ const SearchBtn = styled.div`
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 export function FeedHome(){
@@ -201,6 +204,9 @@ const FollowerBtn = styled.div`
     padding: 5px;
     border: 2px solid black;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 const FollowingBtn = styled.div`
@@ -210,6 +216,9 @@ const FollowingBtn = styled.div`
     padding: 5px;
     border: 2px solid black;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 const FeedBox = styled.div`
     
@@ -432,7 +441,7 @@ export function FeedContainer({feed}) {
         {follower && following? <div style={{padding:"5px 0"}}>
             <Container>
                 <Contents>
-                    <Flex style={{padding: "20px 30px", justifyContent:"space-between"}}>
+                    <Flex style={{padding: "15px 30px", justifyContent:"space-between"}}>
                         <Flex>
                             <ProfileImg src={feed.user.data? getServerImgFile(feed.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+feed.user.userId)}}/>
                             <div>
@@ -445,7 +454,7 @@ export function FeedContainer({feed}) {
                                         <div style={{cursor:"pointer"}}>팔로잉 {following.length}명</div>
                                     </Tooltip>
                                 </Flex>
-                                <div>{feed.createdAt}업로드</div>
+                                <div>{formatDate(feed.createdAt)} 업로드</div>
                             </div>
                         </Flex>
                         {sessionUser!=feed.user.userId? sessionUserFollow? <FollowingBtn onClick={()=>{FollowClick()}}>팔로잉</FollowingBtn>: 
@@ -454,7 +463,7 @@ export function FeedContainer({feed}) {
                     </Flex>
 
                     <FeedImg src={feed.imageData? getServerImgFile(feed.imageData): feed.image} onClick={()=>{navigate("/feed/"+feed.id)}}/>
-                    <div style={{padding: "20px 30px"}}>
+                    <div style={{padding: "15px 30px"}}>
                         <Flex>
                             <img src={like? redheart: heart} style={{height: "25px", cursor:"pointer"}} onClick={()=>{LikeClick()}}/>
                             <Tooltip tooltipContents={LikeTooltip(likeList, ()=>{setFollowChange(!followChange)})} bottom="true">
@@ -462,7 +471,7 @@ export function FeedContainer({feed}) {
                             </Tooltip>
                             <img src={scrap? blackbookmark: bookmark} style={{height: "25px", cursor:"pointer"}} onClick={()=>{ScrapClick()}}/>
                         </Flex>
-                        <div style={{marginTop: "20px"}}>{feed.text}</div>
+                        <div style={{marginTop: "10px", whiteSpace: "pre-line"}}>{feed.text}</div>
                     </div>
                 </Contents>
             </Container>

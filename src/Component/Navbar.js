@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Sidebar } from './Sidebar';
 import menuImg from "./../images/icon/menu.png";
 
+const NavbarFix = styled.div`
+  position: ${props => (props.isScrolled ? 'fixed' : 'auto')};
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  height: ${props => (props.isScrolled ? '60px' : '100px')};
+  background-color: ${props => (props.isScrolled ? 'rgba(0, 0, 0, 0.7)' : 'black')};
+  transition: background-color 0.3s;
+`;
+
 const Container = styled.div`
-  height: 100px;
+  height: ${props => (props.isScrolled ? '60px' : '100px')};
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
   padding: 0 5%;
-  background-color: black;
   color: white;
 `;
 
@@ -40,9 +49,27 @@ export function Navbar() {
     setMenuOpen(!isMenuOpen);
   };
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) { // 스크롤 위치가 50px 이상일 때
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <>
-      <Container>
+    <NavbarFix isScrolled={isScrolled}>
+      <Container isScrolled={isScrolled}>
         <LineContainer>
           <Line/>
           <h3>UNTITLED</h3>
@@ -57,6 +84,6 @@ export function Navbar() {
         </Menubar>
       </Container>
       <Sidebar isOpen={isMenuOpen} toggleMenu={toggleMenu} />
-    </>
+    </NavbarFix>
   );
 }

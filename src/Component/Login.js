@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Navbar } from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { SessionCurrent } from "./SessionCurrent";
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -74,11 +75,19 @@ const ButtonContainer = styled.div`
 `;
 
 export function Login() {
+  const { sessionUser } = SessionCurrent();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   let id;
   let password;
+
+  useEffect(() => {
+    if(sessionUser&&sessionUser!="anonymousUser"){
+      alert("이미 로그인하셨습니다.");
+      window.location.href = '/';
+    }
+  }, [sessionUser]);
 
   async function login(){
       if(id==null || password==null){

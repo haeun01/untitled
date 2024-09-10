@@ -29,6 +29,10 @@ const Button = styled.div`
     /* width: 100px; */
     margin: auto;
     cursor: pointer;
+    &:hover {
+        background-color: #561689;
+        color: white;
+    }
 `
 
 export function FeedCreate(){

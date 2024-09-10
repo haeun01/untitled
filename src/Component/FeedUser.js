@@ -36,6 +36,7 @@ const FlexC = styled.div`
 
 const ProfileText = styled.div`
     border-radius: 5px;
+    white-space: pre-line;
 `
 
 const FeedContainer = styled.div`

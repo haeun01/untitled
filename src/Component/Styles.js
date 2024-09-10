@@ -262,6 +262,9 @@ const FollowerBtn = styled.div`
     border-radius: 5px;
     padding: 5px;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 const FollowingBtn = styled.div`
@@ -270,6 +273,9 @@ const FollowingBtn = styled.div`
     border-radius: 5px;
     padding: 5px;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 function UserBarContent({user, func}){
@@ -395,5 +401,14 @@ function UserBarContent({user, func}){
     </>
 }
 
-
+export const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
 

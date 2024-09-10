@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
 import { SessionCurrent } from "./SessionCurrent"
+import { useEffect } from "react";
 
 // 얇은 텍스트 스타일
 const Title = styled.div`
@@ -53,8 +54,8 @@ const Button = styled.button`
   margin: 10px 10px;
   border: 1px solid white;
   border-radius: 30px;
-  background-color: ${props => (props.primary ? "white" : "black")};
-  color: ${props => (props.primary ? "black" : "white")};
+  background-color: black;
+  color: white;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s; /* 부드러운 전환 효과 추가 */
@@ -76,6 +77,13 @@ export function Logout(){
     const { sessionUser } = SessionCurrent();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if(sessionUser=="anonymousUser"){
+          alert("로그인이 필요한 서비스입니다.");
+          window.location.href = '/login';
+        }
+    }, [sessionUser]);
+
     async function logout(){
         try{
             const response = await axios.post("http://localhost:8080/api/user/logout", {}, { withCredentials: true });
@@ -93,8 +101,8 @@ export function Logout(){
         <Title>Logout</Title>
             <Div><strong>{sessionUser}</strong>님 로그아웃 하시겠습니까?</Div>
             <BtnContainer>
-            <Button onClick={()=>{logout()}}>Logout</Button>
-            <Button onClick={()=>{navigate("/")}}>Back</Button>
+            <Button primary onClick={()=>{logout()}}>Logout</Button>
+            <Button primary onClick={()=>{navigate(-1)}}>Back</Button>
             </BtnContainer>
         </Container>
     </>

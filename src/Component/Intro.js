@@ -14,6 +14,8 @@ const Container = styled.div`
     font-size: 60px;
     color: white;
   }
+  position: relative; /* 커서 위치를 컨테이너 안에서만 설정 */
+  overflow: hidden;
 `;
 
 // 로고 애니메이션 스타일 정의
@@ -146,7 +148,7 @@ export function Intro() {
       <Container>
         <Rectangle ref={containerRef}>
           <Logo>
-            <a href="#">
+            <a>
               <img
                 src="./images/logo/logo_white.png"
                 width="200"
@@ -161,8 +163,9 @@ export function Intro() {
             <ThinText>"</ThinText>
           </h3>
         </Rectangle>
+        <Cursor className={`cursor ${cursorClass}`} ref={cursorRef} />
       </Container>
-      <Cursor className={`cursor ${cursorClass}`} ref={cursorRef} />
+      
     </>
   );
 }

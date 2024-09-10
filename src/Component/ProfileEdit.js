@@ -52,6 +52,10 @@ const Button = styled.div`
     /* width: 100px; */
     margin: auto;
     cursor: pointer;
+    &:hover {
+        background-color: #561689;
+        color: white;
+    }
 `
 
 
@@ -157,7 +161,7 @@ export function ProfileEdit(){
                 <Text style={{margin:"0 0 10px 0"}}>현재 프로필</Text>
                 <Flex>
                     <ProfileImg src={user.data? getServerImgFile(user.data): defaltUserImg} />
-                    <div>{user.profileText}</div>
+                    <div style={{whiteSpace: "pre-line"}}>{user.profileText}</div>
                 </Flex>
             </NowProfile>: <div></div>}
 

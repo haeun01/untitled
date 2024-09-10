@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FollowerTooltip, FollowingTooltip, LikeTooltip, Loading, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
+import { FollowerTooltip, FollowingTooltip, formatDate, LikeTooltip, Loading, MyFeedTooltip, ScrollableContent, Title, Tooltip } from "./Styles";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -63,6 +63,9 @@ const CommentBtn = styled.div`
     /* border-radius: 3px; */
     cursor: pointer;
     margin-left: 20px;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 const InputComment = styled.input`
@@ -85,6 +88,9 @@ const CommentBtnComment = styled.div`
     /* border-radius: 3px; */
     cursor: pointer;
     margin-left: 20px;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 const FollowerBtn = styled.div`
@@ -94,6 +100,9 @@ const FollowerBtn = styled.div`
     padding: 5px;
     border: 2px solid black;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 `
 
 const FollowingBtn = styled.div`
@@ -103,6 +112,27 @@ const FollowingBtn = styled.div`
     padding: 5px;
     border: 2px solid black;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
+`
+const ImgBox = styled.div`
+    height: 600px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+`
+
+const Textarea = styled.textarea`
+    width: 100%;
+    padding: 5px;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    height: 100%;
 `
 
 export function Feed() {
@@ -120,6 +150,7 @@ export function Feed() {
     const [sessionUserFollow, setSessionUserFollow] = useState();
     const [followChange, setFollowChange] = useState(false);
     const [feedEdit, setFeedEdit] = useState(false);
+    const [commentText, setCommentText] = useState("");
 
     useEffect(() => {
         GetFeed()
@@ -314,7 +345,7 @@ export function Feed() {
         }
     }
 
-    let commentText;
+    // let commentText;
 
     async function CommentPost(){
         if(sessionUser=="anonymousUser"){
@@ -330,6 +361,7 @@ export function Feed() {
             const data = response.data;
             console.log("CommentPost", data);
             setCommentPost(!commentPost);
+            setCommentText("");
         }catch(error){
             console.log("요청에 실패했습니다.", error);
         }
@@ -374,7 +406,7 @@ export function Feed() {
             <Container><div>
                 <div style={{fontSize:"20px", fontWeight:"bold", cursor:"pointer", padding:"0 0 10px 0", width:"10px"}} onClick={()=>{navigate(-1)}}>Back</div>
                 <Contents>
-                    <Flex style={{padding: "20px 30px", justifyContent:"space-between"}}>
+                    <Flex style={{padding: "10px 30px", justifyContent:"space-between"}}>
                         <Flex>
                             <div style={{width:"50px", height:"50px"}}>
                                 <ProfileImg src={feed.user.data? getServerImgFile(feed.user.data): defaltUserImg} onClick={()=>{navigate("/feed/user/"+feed.user.userId)}}/>
@@ -389,7 +421,7 @@ export function Feed() {
                                         <div style={{cursor:"pointer"}}>팔로잉 {following.length}명</div>
                                     </Tooltip>
                                 </Flex>
-                                <div>{feed.createdAt}업로드</div>
+                                <div>{formatDate(feed.createdAt)} 업로드</div>
                             </div>
                         </Flex>
                         {sessionUser!=feed.user.userId? sessionUserFollow? <FollowingBtn onClick={()=>{FollowClick()}}>팔로잉</FollowingBtn>: 
@@ -397,9 +429,11 @@ export function Feed() {
                             <Tooltip tooltipContents={MyFeedTooltip(feed, ()=>{navigate(-1)}, ()=>{setFeedEdit(!feedEdit)})}><FollowerBtn>...</FollowerBtn></Tooltip>
                         }
                     </Flex>
-
-                    <img src={feed.imageData? getServerImgFile(feed.imageData): feed.image} style={{width: "100%"}}/>
-                    <div style={{padding: "20px 30px"}}>
+                    <ImgBox>
+                        <img src={feed.imageData? getServerImgFile(feed.imageData): feed.image} style={{height: "100%", width:"100%", objectFit: "contain"}}/>
+                    </ImgBox>
+                    
+                    <div style={{padding: "15px 30px"}}>
                         <Flex>
                             <img src={like? redheart: heart} style={{height: "25px", cursor:"pointer"}} onClick={()=>{LikeClick()}}/>
                             <Tooltip tooltipContents={LikeTooltip(likeList, ()=>{setFollowChange(!followChange)})} bottom="true">
@@ -407,7 +441,7 @@ export function Feed() {
                             </Tooltip>
                             <img src={scrap? blackbookmark: bookmark} style={{height: "25px", cursor:"pointer"}} onClick={()=>{ScrapClick()}}/>
                         </Flex>
-                        <div style={{marginTop: "20px"}}>{feed.text}</div>
+                        <div style={{marginTop: "10px", whiteSpace: "pre-line"}}>{feed.text}</div>
                     </div>
                 </Contents></div>
                 <div>
@@ -421,7 +455,7 @@ export function Feed() {
                             </ScrollableContent>
                         </div>
                         <Flex style={{gap: "0"}}>
-                            <Input type="text" placeholder="Enter Comment" onChange={(e)=> {commentText = e.target.value}}/>
+                            <Textarea rows="1" value={commentText} placeholder="Enter Comment" required onChange={(e)=> {setCommentText(e.target.value)}}/>
                             <CommentBtn onClick={()=>{CommentPost()}}>SEND</CommentBtn>
                         </Flex>
                     </CommentBox>
@@ -457,6 +491,7 @@ export function FeedCommentBar({comment, func, func2}){
     const [commentWriteLook, setCommentWriteLook] = useState(false);
     const [commentPost, setCommentPost] = useState(false);
     const [commentDelete, setCommentDelete] = useState(false);
+    const [commentText, setCommentText] = useState("");
 
     const commentInputRef = useRef(null);
     
@@ -555,7 +590,7 @@ export function FeedCommentBar({comment, func, func2}){
         }
     }
 
-    let commentText;
+    // let commentText;
 
     async function CommentPost(){
         if(sessionUser=="anonymousUser"){
@@ -572,6 +607,7 @@ export function FeedCommentBar({comment, func, func2}){
             console.log("CommentPost", data);
             setCommentPost(!commentPost);
             func();
+            setCommentText("");
         }catch(error){
             console.log("요청에 실패했습니다.", error);
         }
@@ -601,11 +637,11 @@ export function FeedCommentBar({comment, func, func2}){
                 <div style={{width: "100%"}}>
                     <Flex style={{gap: "5px", marginBottom: "5px"}}>
                         <div>{comment.user.userId}</div>
-                        <div style={{fontSize: "10px", color: "gray"}}>{comment.createdAt}</div>
+                        <div style={{fontSize: "10px", color: "gray"}}>{formatDate(comment.createdAt)}</div>
                     </Flex>
                     <Flex style={{justifyContent: "space-between"}}>
                         <div>
-                            <div>{comment.text}</div>
+                            <div style={{whiteSpace: "pre-line"}}>{comment.text}</div>
                             <Flex>
                                 <Flex style={{gap: "5px"}}>
                                     <img src={like? redheart: heart} style={{height: "15px", cursor:"pointer"}} onClick={()=>{LikeClick()}}/>
@@ -621,7 +657,7 @@ export function FeedCommentBar({comment, func, func2}){
                         {comment.user.userId==sessionUser? <img src={closeBtn} style={{height: "25px", cursor:"pointer", marginRight:"20px"}} onClick={()=>{CommentDelete()}}/>: null}
                     </Flex>
                     {commentWriteLook? <Flex ref={commentInputRef} style={{gap: "0"}}>
-                        <InputComment type="text" placeholder="Enter Comment" onChange={(e)=> {commentText = e.target.value}}/>
+                        <Textarea rows="1" value={commentText} placeholder="Enter Comment" required onChange={(e)=> {setCommentText(e.target.value)}}/>
                         <CommentBtnComment onClick={()=>{CommentPost()}}>SEND</CommentBtnComment>
                     </Flex>: null}
                     {commentLook? commentList.map((comment, index)=> (

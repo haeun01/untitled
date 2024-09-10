@@ -16,7 +16,7 @@ export function SessionCurrent() {
             setSessionUser(userId)
         } catch (error) {
             console.log("요청에 실패했습니다.", error);
-            setSessionUser(null)
+            setSessionUser("anonymousUser")
         }
     }
 

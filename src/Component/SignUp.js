@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { SessionCurrent } from "./SessionCurrent";
 
 
 // 컨테이너 스타일
@@ -73,6 +74,7 @@ const ButtonContainer = styled.div`
 `;
 
 export function SignUp() {
+  const { sessionUser } = SessionCurrent();
   const [user, setUser] = useState(null);
 
   let id;
@@ -80,6 +82,13 @@ export function SignUp() {
   let name;
   let email;
   let birthday;
+
+  useEffect(() => {
+    if(sessionUser&&sessionUser!="anonymousUser"){
+      alert("이미 로그인하셨습니다. 로그아웃 후에 이용해주세요.");
+      window.location.href = '/logout';
+    }
+  }, [sessionUser]);
 
   async function signup(){
     if(id==null || password==null || name==null || email==null || birthday==null){
