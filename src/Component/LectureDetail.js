@@ -126,6 +126,7 @@ export function LectureDetail() {
       .get("/api/current")
       .then((response) => {
         setUser(response.data); // 사용자 정보 설정
+        console.log("User data fetched:", response.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -156,18 +157,26 @@ export function LectureDetail() {
       (frame) => {
         console.log("Connected: " + frame);
 
-        // /topic/public 경로를 구독 (서버에서 메시지를 브로드캐스트하는 경로)
         stompClient.current.subscribe(`/topic/lecture/${id}`, (message) => {
-          // 메시지를 수신할 때 처리하는 로직
-          const chatMessage = JSON.parse(message.body);
-          setChatMessages((prevMessages) => [...prevMessages, chatMessage]);
+          try {
+            const chatMessage = JSON.parse(message.body);
+            console.log("Received message: ", chatMessage); // 메시지 파싱 확인
+
+            setChatMessages((prevMessages) => [...prevMessages, chatMessage]);
+          } catch (error) {
+            console.error(
+              "Error parsing received message:",
+              error,
+              message.body
+            );
+          }
         });
       },
       (error) => {
         console.error("Connection ERROR: " + error);
       }
     );
-  }, [id]);
+  }, []);
 
   const sendMessage = () => {
     if (!message.trim()) {
@@ -178,7 +187,7 @@ export function LectureDetail() {
     if (stompClient.current && stompClient.current.connected) {
       const chatMessage = {
         content: message,
-        user: { userName: user.userName },
+        user: { userId: user.userId },
       };
 
       stompClient.current.send(
@@ -215,27 +224,36 @@ export function LectureDetail() {
             <p>Loading Video...</p>
           )}
         </VideoPlayer>
+
         <ChatSection>
           {chatMessages.length > 0 ? (
             chatMessages.map((msg, index) => (
               <p key={index}>
-                <strong>{msg.user.userName}</strong> {msg.content}
+                <strong>{msg.userId}</strong> : {msg.content}
               </p>
             ))
           ) : (
             <p>No chat messages</p>
           )}
-          <ChatControls>
-            <ChatInput
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="message"
-            />
-            <ChatButton onClick={sendMessage}>Send</ChatButton>
-          </ChatControls>
+
+          {/* 사용자 로그인 여부에 따라 메시지 입력 필드 및 버튼 표시 */}
+          {user ? (
+            <ChatControls>
+              <ChatInput
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="message"
+              />
+              <ChatButton onClick={sendMessage}>Send</ChatButton>
+            </ChatControls>
+          ) : (
+            <p>You need to log in to send messages.</p>
+          )}
         </ChatSection>
       </ContentArea>
+
+      {/* 마우스 커서 표시 */}
       <div
         style={{
           position: "absolute",
