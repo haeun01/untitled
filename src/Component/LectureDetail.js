@@ -151,17 +151,23 @@ export function LectureDetail() {
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    stompClient.current.connect({}, (frame) => {
-      console.log("Connected: " + frame);
+    stompClient.current.connect(
+      {},
+      (frame) => {
+        console.log("Connected: " + frame);
 
-      // /topic/public 경로를 구독 (서버에서 메시지를 브로드캐스트하는 경로)
-      stompClient.current.subscribe("/topic/public", (message) => {
-        // 메시지를 수신할 때 처리하는 로직
-        const chatMessage = JSON.parse(message.body);
-        setChatMessages((prevMessages) => [...prevMessages, chatMessage]);
-      });
-    });
-  }, []);
+        // /topic/public 경로를 구독 (서버에서 메시지를 브로드캐스트하는 경로)
+        stompClient.current.subscribe(`/topic/lecture/${id}`, (message) => {
+          // 메시지를 수신할 때 처리하는 로직
+          const chatMessage = JSON.parse(message.body);
+          setChatMessages((prevMessages) => [...prevMessages, chatMessage]);
+        });
+      },
+      (error) => {
+        console.error("Connection ERROR: " + error);
+      }
+    );
+  }, [id]);
 
   const sendMessage = () => {
     if (!message.trim()) {
@@ -172,12 +178,11 @@ export function LectureDetail() {
     if (stompClient.current && stompClient.current.connected) {
       const chatMessage = {
         content: message,
-        user: { userId: user.userId },
-        lecture: { id: id },
+        user: { userName: user.userName },
       };
 
       stompClient.current.send(
-        "/app/chat.sendMessage",
+        `/app/chat.sendMessage/${id}`,
         {},
         JSON.stringify(chatMessage)
       );
@@ -214,7 +219,7 @@ export function LectureDetail() {
           {chatMessages.length > 0 ? (
             chatMessages.map((msg, index) => (
               <p key={index}>
-                <strong>{msg.senderName}:</strong> {msg.content}
+                <strong>{msg.user.userName}</strong> {msg.content}
               </p>
             ))
           ) : (
