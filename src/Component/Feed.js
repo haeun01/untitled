@@ -447,7 +447,7 @@ const Img = styled.img`
     cursor: pointer;
 `
 
-export function FeedCommentBar({comment, func}){
+export function FeedCommentBar({comment, func, func2}){
     const navigate = useNavigate();
     const { sessionUser } = SessionCurrent();
     const [commentList, setCommentList] = useState();
@@ -584,6 +584,9 @@ export function FeedCommentBar({comment, func}){
             console.log("CommentDelete", data);
             setCommentDelete(true);
             func();
+            if (typeof func2 === "function") {
+              func2();
+            }
         }catch(error){
             console.log("요청에 실패했습니다.", error);
         }
@@ -622,7 +625,7 @@ export function FeedCommentBar({comment, func}){
                         <CommentBtnComment onClick={()=>{CommentPost()}}>SEND</CommentBtnComment>
                     </Flex>: null}
                     {commentLook? commentList.map((comment, index)=> (
-                        <FeedCommentBar key={comment.id} comment={comment} func={func}/>
+                        <FeedCommentBar key={comment.id} comment={comment} func={func} func2={() => setCommentPost(!commentPost)}/>
                     )): null}
                 </div>
             </Flex>
