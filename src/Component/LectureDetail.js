@@ -243,7 +243,12 @@ export function LectureDetail() {
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="message"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage();
+                  }
+                }}
+                placeholder="Write a message"
               />
               <ChatButton onClick={sendMessage}>Send</ChatButton>
             </ChatControls>
