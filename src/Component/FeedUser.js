@@ -234,7 +234,7 @@ export function FeedUser(){
                         </Tooltip>
                         <Flex>
                             {isMyPage? <Btn onClick={()=>{navigate("/mypage/profile")}}>프로필 편집</Btn> :<Btn onClick={()=>{FollowClick()}}>{sessionUserFollow? "following": "follow"}</Btn>}
-                            {teacher? <Btn onClick={()=>{navigate("/teacher/"+teacher.id)}}>lecture page</Btn>: null}
+                            {/* {teacher? <Btn onClick={()=>{navigate("/teacher/"+teacher.id)}}>lecture page</Btn>: null} */}
                         </Flex>
                     </Flex>
                     <div style={{fontSize:"30px", fontWeight:"bold", marginTop:"20px"}}>{id}</div>

@@ -53,7 +53,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) { // 스크롤 위치가 50px 이상일 때
+      if (window.scrollY > 80) { // 스크롤 위치가 50px 이상일 때
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
