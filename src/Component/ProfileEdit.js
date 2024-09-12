@@ -67,6 +67,8 @@ export function ProfileEdit(){
     const [imageSendFile, setImageSendFile] = useState(null);
     const [user, setUser] = useState(null);
     const [change, setChange] = useState(false);
+    const [change2, setChange2] = useState(false);
+    const [profileText, setProfileText] = useState("");
     const { sessionUser } = SessionCurrent();
 
     function showFile(file) {
@@ -124,14 +126,12 @@ export function ProfileEdit(){
             try {
                 const response = await axios.post("http://localhost:8080/api/changeProfileText", {userId: sessionUser, profileText: profileText});
                 console.log("text",response.data);
-                setChange(!change)
+                setChange2(!change2)
             } catch (error) {
                 console.error("요청에 실패했습니다.", error.response ? error.response.data : error.message);
             }
         }
     }
-
-    let profileText;
 
     useEffect(() => {
         if(sessionUser){
@@ -140,7 +140,7 @@ export function ProfileEdit(){
         setImageSrc(null);
         setImageByte(null);
         setImageSendFile(null);
-    }, [sessionUser, change]);
+    }, [sessionUser, change, change2]);
 
     async function SendUser(){
         try{
@@ -177,7 +177,7 @@ export function ProfileEdit(){
                 rows="10"
                 placeholder="Enter Profile Text" 
                 required
-                onChange={(e)=> {profileText = e.target.value}}
+                onChange={(e)=> {setProfileText(e.target.value)}}
             />
             <Button onClick={()=>{editBtnClick()}}>Edit</Button>            
         </Container>
