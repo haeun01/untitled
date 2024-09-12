@@ -12,7 +12,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: 100vh;
   background-color: black;
   padding: 55px;
   box-sizing: border-box;
