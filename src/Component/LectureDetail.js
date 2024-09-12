@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -56,10 +56,16 @@ const ChatSection = styled.div`
   width: 400px;
   height: 600px;
   background-color: #333;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   position: relative;
+`;
+
+const ChatMessages = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  height: calc(100% - 60px);
 `;
 
 const ChatInput = styled.input`
@@ -72,6 +78,7 @@ const ChatInput = styled.input`
   box-sizing: border-box;
   /* border: 1px solid black; */
   color: black;
+  border: none;
 `;
 
 const ChatButton = styled.button`
@@ -90,9 +97,10 @@ const ChatControls = styled.div`
   align-items: center;
   width: 100%;
   position: absolute;
-  bottom: 20px;
+  bottom: 0;
   left: 0;
-  padding: 0 20px;
+  padding: 10px;
+  background-color: #333;
   box-sizing: border-box;
 `;
 
@@ -103,6 +111,7 @@ export function LectureDetail() {
   const [message, setMessage] = useState(""); // 입력한 메시지 상태
   const [user, setUser] = useState(null); // 현재 로그인한 사용자 정보
   const stompClient = useRef(null);
+  const chatMessagesRef = useRef(null);
 
   //이모티콘의 위치를 상태로 관리
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -176,7 +185,14 @@ export function LectureDetail() {
         console.error("Connection ERROR: " + error);
       }
     );
-  }, []);
+  }, [id]);
+
+  // 새 메시지가 추가될 때마다 스크롤을 맨 아래 이동
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
 
   const sendMessage = () => {
     if (!message.trim()) {
@@ -195,6 +211,7 @@ export function LectureDetail() {
         {},
         JSON.stringify(chatMessage)
       );
+
       setMessage(""); // 메시지 전송 후 입력 필드 비우기
     } else {
       console.error("STOMP client is not connected");
@@ -226,15 +243,17 @@ export function LectureDetail() {
         </VideoPlayer>
 
         <ChatSection>
-          {chatMessages.length > 0 ? (
-            chatMessages.map((msg, index) => (
-              <p key={index}>
-                <strong>{msg.userId}</strong> : {msg.content}
-              </p>
-            ))
-          ) : (
-            <p>No chat messages</p>
-          )}
+          <ChatMessages ref={chatMessagesRef}>
+            {chatMessages.length > 0 ? (
+              chatMessages.map((msg, index) => (
+                <p key={index}>
+                  <strong>{msg.userId}</strong> : {msg.content}
+                </p>
+              ))
+            ) : (
+              <p>No chat messages</p>
+            )}
+          </ChatMessages>
 
           {/* 사용자 로그인 여부에 따라 메시지 입력 필드 및 버튼 표시 */}
           {user ? (
